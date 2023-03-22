@@ -1,0 +1,66 @@
+@font-face {
+    font-family: metropolis;
+    src: url("Metropolis-Regular.woff2");
+}
+
+
+.content{
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+
+    font-family: metropolis, serif;
+}
+
+.sidebar{
+    height: 100vh;
+    width: 20%;
+    background-color: #001E44;
+    display: flex;
+    justify-content: center;
+}
+.sidebar-menu{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 10rem;
+}
+.sidebar-element{
+    cursor: pointer;
+    font-size: x-large;
+    color: white;
+    transition: 0.2s;
+}
+.sidebar-element:hover{
+    color: #009CDE;
+}
+.active{
+    color: #009CDE;
+    cursor: default;
+}
+
+.main{
+    height: 100vh;
+    width: 80%;
+}
+
+.card{
+    flex-grow: 1;
+    min-width: 40%;
+    min-height: 10rem;
+
+    padding: 2rem;
+
+    border: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+
+    display: flex;
+    justify-content: space-between;
+}
+.card h1{
+    color: #001E44;
+    font-size: x-large;
+    font-weight: 1000;
+}

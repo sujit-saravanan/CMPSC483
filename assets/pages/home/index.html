@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="learning_factory_logo.png">
+    <title>Test</title>
+</head>
+<body>
+<div class="content">
+
+
+    <div class="sidebar">
+
+        <div class="sidebar-menu">
+
+            <!--            Home-->
+            <div class="sidebar-element active" id="sidebar-home-element" onclick="setActiveSidebarElement(this)">
+                <div class="sidebar-element-icon"></div>
+                <div class="sidebar-element-text">Home</div>
+            </div>
+
+            <!--            Assignment-->
+            <div class="sidebar-element" id="sidebar-assignment-element" onclick="setActiveSidebarElement(this)">
+                <div class="sidebar-element-icon"> </div>
+                <div class="sidebar-element-text">Assignments</div>
+            </div>
+
+            <!--            Export-->
+            <div class="sidebar-element" id="sidebar-export-element" onclick="setActiveSidebarElement(this)">
+                <div class="sidebar-element-icon"></div>
+                <div class="sidebar-element-text">Export</div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="main" id="main">
+
+        <div class="main-cards">
+
+            <div class="card">
+                <div class="card-header">
+                    <h1>Completed Teams</h1>
+                    progress
+                    <button onclick="grow(5)">add5</button>
+                    <button onclick="shrink(5)">sub5</button>
+
+                    <button onclick="testRequest(5)">testRequest5</button>
+                </div>
+
+                <div class="circle" id="completed-teams-circle">
+                    <div class="inner"></div>
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h1>Assigned Students</h1>
+                    progress
+                </div>
+
+                <div class="circle" id="assigned-students-circle">
+                    <div class="inner"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h1>Student Major Distribution</h1>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
