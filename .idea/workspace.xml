@@ -22,6 +22,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e3fb297e-53c9-4272-a733-4593b4a427f4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/pages/admin/admin_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/pages/admin/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/pages/admin/learning_factory_logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +39,9 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -52,15 +59,25 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "last_opened_file_path": "/home/dappercore/Desktop/school_projects/CMPSC483",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default"
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/pages/admin" />
+      <recent name="$PROJECT_DIR$/assets/textures" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
@@ -85,6 +102,8 @@
       <workItem from="1679141797388" duration="12805000" />
       <workItem from="1679621546281" duration="296000" />
       <workItem from="1679621903728" duration="1029000" />
+      <workItem from="1679688241700" duration="1000" />
+      <workItem from="1679688251287" duration="860000" />
     </task>
     <servers />
   </component>

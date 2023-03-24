@@ -138,7 +138,9 @@ int main() {
             ->page("/", "assets/pages/home")
             ->page("/", "assets/styles")
             ->page("/", "assets/fonts")
-            ->page("/", "assets/textures");
+            ->page("/", "assets/textures")
+            ->page("/admin", "assets/pages/admin")
+            ->page("/admin", "assets/textures");
 
     server->get("/log", REQ_RES {
                 std::cout << "qowegfhqkwjehf\n\n";
@@ -147,6 +149,14 @@ int main() {
             ->get("/test", REQ_RES {
                 std::cout << "qowegfhqkwjehf\n\n";
                 res.set_content(SUPER_SECRET_NUMBER, "text/json");
+            })
+            ->get("/export_csv", REQ_RES {
+                std::cout << "requested CSV export\n";
+                res.set_content("requested CSV export", "text/json");
+            })
+            ->get("/upload_csv", REQ_RES {
+                std::cout << "requested CSV update\n";
+                res.set_content("requested CSV update", "text/json");
             });
 
     server->post("/csv", REQ_RES {

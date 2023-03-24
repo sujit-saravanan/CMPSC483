@@ -29,7 +29,7 @@
                     <div class="div-13">
                         <div class="div-14">
                             <picture>
-                                <img loading="lazy" src="upload_icon.svg" class="svg" />
+                                <img loading="lazy" src="admin/upload_icon.svg" class="svg" />
                             </picture>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
 
                         <input id='file_select' type='file' accept='.csv' value="Choose Files" multiple required
                             class='file-input' />
-                        <input type='submit' value='Upload' class="div-16" onclick="test()" />
+                        <input type='submit' value='Upload' class="div-16" onclick="fetch('/upload_csv').then((response) => response.text()).then((data) => console.log(data));" />
 
                     </div>
                     </form>
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="div-22">
-                <button class="div-23">
+                <button class="div-23" onclick="fetch('/export_csv').then((response) => response.text()).then((data) => console.log(data));">
                     Export
                 </button>
             </div>
