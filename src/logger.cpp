@@ -1,6 +1,6 @@
 #include "logger.h"
 #include <iostream>
-#include <rang.hpp>
+#include "rang.h"
 #include <cstdarg>
 
 void log_output(LOG_LEVEL level, const char* message, ...){
