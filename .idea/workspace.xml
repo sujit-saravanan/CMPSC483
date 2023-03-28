@@ -23,7 +23,6 @@
     <list default="true" id="e3fb297e-53c9-4272-a733-4593b4a427f4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/server.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,9 +76,9 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="learning_factory" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="learning_factory" TARGET_NAME="learning_factory" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="learning_factory" RUN_TARGET_NAME="learning_factory">
@@ -102,7 +101,8 @@
       <workItem from="1679621903728" duration="1029000" />
       <workItem from="1679688241700" duration="1000" />
       <workItem from="1679688251287" duration="860000" />
-      <workItem from="1679976026349" duration="103000" />
+      <workItem from="1679976026349" duration="1413000" />
+      <workItem from="1679979242530" duration="32000" />
     </task>
     <servers />
   </component>

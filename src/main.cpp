@@ -2,6 +2,8 @@
 #include "rapidcsv.h"
 #include "magic_enum.h"
 #include "logger.h"
+#include <unordered_map>
+
 
 const char    *HOST = "localhost";
 const int32_t PORT  = 8080;
