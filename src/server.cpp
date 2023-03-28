@@ -1,4 +1,5 @@
 #include "server.h"
+#include "logger.h"
 
 // adds a page with contents located in directory_path at address/mount_point
 Server *Server::page(const std::string &mount_point, const std::string &directory_path) {
