@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Student Exchange</title>
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			color: #006699;
+			text-align: center;
+		}
+		form {
+			margin: 20px auto;
+			padding: 20px;
+			background-color: #fff;
+			max-width: 600px;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.3);
+		}
+		label {
+			display: block;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+		select {
+			margin-bottom: 20px;
+			padding: 5px;
+			font-size: 16px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		button {
+			background-color: #006699;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+		button:hover {
+			background-color: #005580;
+		}
+		.member-list {
+			margin-top: 20px;
+			padding: 20px;
+			background-color: #f5f5f5;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.3);
+		}
+	</style>
+</head>
+<body>
+	<h1>Student Exchange</h1>
+	<form>
+		<label for="team-select">Select Team:</label>
+		<select id="team-select">
+			<option value="team1">Team 1</option>
+			<option value="team2">Team 2</option>
+			<option value="team3">Team 3</option>
+		</select>
+
+		<label for="member-select">Select Member:</label>
+		<select id="member-select">
+			<option value="">Select a team first</option>
+		</select>
+
+		<label for="new-team-select">Assign to new team:</label>
+		<select id="new-team-select">
+			<option value="team1">Team 1</option>
+			<option value="team2">Team 2</option>
+			<option value="team3">Team 3</option>
+		</select>
+
+		<button type="submit">Assign to new team</button>
+	</form>
+
+	<div class="member-list">
+		<h2>Team 1 Members</h2>
+		<ul>
+			<li>Member 1</li>
+			<li>Member 2</li>
+			<li>Member 3</li>
+		</ul>
+	</div>
+
+	<script>
+		// Function to update the member list based on the selected team
+		function updateMemberList() {
+			const teamSelect = document.getElementById("team-select");
+			const memberSelect = document.getElementById("member-select");
+
+			// Get the selected team from the dropdown
+			const selectedTeam = teamSelect.value;
+
+			// Get the member list element
+			const memberList = document.querySelector(".member-list");
+
+				// Update the member list heading
+		memberList.querySelector("h2").textContent = `${selectedTeam} Members`;
+
+		// Create an array of fake members
+		const fakeMembers = [
+			"John Doe",
+			"Jane Smith",
+			"Bob Johnson",
+			"Sara Lee",
+			"Tom Adams",
+			"Mary Brown"
+		];
+
+		// Clear the existing member list
+		const memberListUl = memberList.querySelector("ul");
+		memberListUl.innerHTML = "";
+
+		// Add a list item for each member in the selected team
+		fakeMembers.forEach((member) => {
+			const li = document.createElement("li");
+			li.textContent = member;
+			memberListUl.appendChild(li);
+		});
+
+		// Clear the selected member dropdown and add an option for each member in the selected team
+		memberSelect.innerHTML = "<option value=''>Select a member</option>";
+		fakeMembers.forEach((member) => {
+			const option = document.createElement("option");
+			option.value = member;
+			option.textContent = member;
+			memberSelect.appendChild(option);
+		});
+	}
+
+	// Add an event listener to the team select dropdown
+	const teamSelect = document.getElementById("team-select");
+	teamSelect.addEventListener("change", updateMemberList);
+</script>
+</body>
+</html>
