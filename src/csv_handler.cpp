@@ -68,12 +68,12 @@ StudentDataParser::StudentDataParser(const char *csv_filepath) noexcept {
         std::vector<std::string> first_names = students.GetColumn<std::string>("first_name");
         std::vector<std::string> on_campuss  = students.GetColumn<std::string>("OnCampus");
         
-        
-        for (int i = 0; i < students.GetRowCount(); i++){
-                m_students_map[campus_ids[i]] = {};
-                m_student_project_map[campus_ids[i]] = project_ids[i];
-                m_student_project_map[campus_ids[i]] = project_ids[i];
-                m_project_students_map[project_ids[i]].push_back(campus_ids[i]);
-                std::cout << first_names[i] << " " << last_names[i] << "(" << campus_ids[i] << "): " << project_ids[i] << "\n";
-        }
+//
+//        for (int i = 0; i < students.GetRowCount(); i++){
+//                m_students_map[campus_ids[i]] = {};
+//                m_student_project_map[campus_ids[i]] = project_ids[i];
+//                m_student_project_map[campus_ids[i]] = project_ids[i];
+//                m_project_students_map[project_ids[i]].push_back(campus_ids[i]);
+//                std::cout << first_names[i] << " " << last_names[i] << "(" << campus_ids[i] << "): " << project_ids[i] << "\n";
+//        }
 }

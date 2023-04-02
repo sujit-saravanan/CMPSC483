@@ -21,18 +21,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3fb297e-53c9-4272-a733-4593b4a427f4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/shared/textures/learning_factory_logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/fonts/Metropolis-Regular.woff2" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shared/fonts/Metropolis-Regular.woff2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/pages/admin/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/pages/admin/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/pages/admin/upload_icon.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/pages/home/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/pages/home/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/pages/home/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/styles/general.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/styles/reset.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/textures/learning_factory_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/pages/exchange/exchange.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/pages/exchange/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/pages/search/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/assets/pages/search/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/csv_handler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/csv_handler.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +62,7 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/home/dappercore/Desktop/personal_projects/MysteriesOfInrithVulkan",
+    "last_opened_file_path": "/home/dappercore/Desktop/school_projects/CMPSC483",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -116,6 +108,7 @@
       <workItem from="1680284079884" duration="6595000" />
       <workItem from="1680297657978" duration="914000" />
       <workItem from="1680300869810" duration="7493000" />
+      <workItem from="1680478543278" duration="93000" />
     </task>
     <servers />
   </component>

@@ -22,7 +22,8 @@ int main() {
 
     auto server = (new Server())
             ->page("/admin", "assets/pages/admin")
-            ->page("/dashboard", "assets/pages/dashboard")
+            ->page("/search", "assets/pages/search")
+            ->page("/exchange", "assets/pages/exchange")
             ->page("/shared", "assets/shared");
     
     server->get("/log", REQ_RES {
