@@ -4,24 +4,31 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../output)
 
-set(HEADER_FILES 
+set(PRECOMPILED_HEADER_FILES 
 		../src/rapidcsv.h
-		../src/httplib.h
-		../src/rang.h
+		../src/logger.h
 		../src/database.h
+		../src/httplib.h
+		../src/csv_handler.h
 		../src/server.h
-		../src/logger.h)
+		../src/rang.h
+		../src/magic_enum.h)
+
+set(HEADER_FILES )
 
 set(SOURCE_FILES 
-		../src/main.cpp
 		../src/logger.cpp
-		../src/server.cpp
+		../src/csv_handler.cpp
 		../src/database.cpp
+		../src/server.cpp
+		../src/main.cpp
+		${PRECOMPILED_HEADER_FILES}
 		${HEADER_FILES})
 
 
 include_directories(src)
+include_directories(src/compiled)
 
 add_executable(learning_factory ${SOURCE_FILES})
 
-target_precompile_headers(learning_factory PRIVATE ${HEADER_FILES})
+target_precompile_headers(learning_factory PRIVATE ${PRECOMPILED_HEADER_FILES})
