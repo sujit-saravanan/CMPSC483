@@ -20,81 +20,20 @@
                 </div>
             </div>
         </div>
-        <div id="drop_zone" class="section" ondrop="dropHandler(event);" ondragover="dragOverHandler(event, this);" ondragleave="dragLeaveHandler(event, this);">
+        <div id="drop_zone" class="section" ondrop="dropHandler(event, this);" ondragover="dragOverHandler(event, this);" ondragleave="dragLeaveHandler(event, this);">
             <img id="upload-icon" src="shared/textures/upload.svg">
-            <p><b class="file-upload-button">Choose CSV file</b> or drag it here</p>
+            <div id="upload-text">
+                <input class="file-upload-button" type="file" id="actual-btn" hidden multiple>
+                <label for="actual-btn">Choose studentAssignments.csv file</label>
+                <p> or drag it here</p>
+            </div>
         </div>
-        <div class="section">
-            <table>
+        <div class="section" id="current-assignments-section">
+            <table id="current-assignments-table">
                 <tr>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>Country</th>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
+                    <th>Instructor</th>
+                    <th>Project</th>
+                    <th>Students</th>
                 </tr>
             </table>
         </div>

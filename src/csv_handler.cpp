@@ -1,5 +1,8 @@
 #include "csv_handler.h"
-ProjectDataParser::ProjectDataParser(const char *csv_filepath) noexcept {
+ProjectDataHandler::ProjectDataHandler(const char *csv_filepath) noexcept {
+        parse(csv_filepath);
+}
+void ProjectDataHandler::parse(const char *csv_filepath) noexcept{
         auto projects = rapidcsv::Document(csv_filepath, rapidcsv::LabelParams(0, -1));
         
         size_t m_count = projects.GetRowCount();
@@ -16,23 +19,24 @@ ProjectDataParser::ProjectDataParser(const char *csv_filepath) noexcept {
                 major_preferences.push_back(preferences);
         }
         
-        std::vector<int> confidentialities   = projects.GetColumn<int>("Confidentiality");
-        std::vector<int> ips                 = projects.GetColumn<int>("IP");
         std::vector<std::string> course_times        = projects.GetColumn<std::string>("CourseTime");
         std::vector<std::string> course_names        = projects.GetColumn<std::string>("CourseName");
-        std::vector<int> physical_prototypes = projects.GetColumn<int>("PhysicalPrototype");
+        std::vector<int> confidentialities           = projects.GetColumn<int>("Confidentiality");
+        std::vector<int> ips                         = projects.GetColumn<int>("IP");
+        std::vector<int> physical_prototypes         = projects.GetColumn<int>("PhysicalPrototype");
         
         projects.Clear();
         
         for (int i = 0; i < m_count; i++) {
-                ProjectData data;
-                data.m_course_time        = course_times[i];
-                data.m_course_name        = course_names[i];
-                data.m_company_name       = company_names[i];
-                data.m_project_title      = project_titles[i];
-                data.m_confidentiality    = confidentialities[i];
-                data.m_ip                 = ips[i];
-                data.m_physical_prototype = physical_prototypes[i];
+                ProjectData data = {
+                        .m_course_time        = course_times[i],
+                        .m_course_name        = course_names[i],
+                        .m_company_name       = company_names[i],
+                        .m_project_title      = project_titles[i],
+                        .m_confidentiality    = static_cast<bool>(confidentialities[i]),
+                        .m_ip                 = static_cast<bool>(ips[i]),
+                        .m_physical_prototype = static_cast<bool>(physical_prototypes[i]),
+                };
                 
                 for (int major = 0; major < magic_enum::enum_count<StudentMajorTypes>(); major++){
                         int rank = major_preferences[i][major];
@@ -47,11 +51,16 @@ ProjectDataParser::ProjectDataParser(const char *csv_filepath) noexcept {
                 
                 m_projects_map[project_ids[i]] = data;
         }
-        for (const auto& title : m_projects_map){
-                std::cout << title.first << ": " << title.second.m_project_title << "\n";
-        }
+        
 }
-StudentDataParser::StudentDataParser(const char *csv_filepath) noexcept {
+std::unordered_map<std::string, ProjectData> &ProjectDataHandler::projectsMap() {
+        return m_projects_map;
+}
+
+StudentDataHandler::StudentDataHandler(const char *csv_filepath) noexcept {
+        parse(csv_filepath);
+}
+void StudentDataHandler::parse(const char *csv_filepath) noexcept {
         auto students = rapidcsv::Document(csv_filepath, rapidcsv::LabelParams(0, -1));
         
         std::vector<StudentMajorTypes> majors(students.GetRowCount());
@@ -59,21 +68,153 @@ StudentDataParser::StudentDataParser(const char *csv_filepath) noexcept {
         for (int i = 0; const auto& major : students.GetColumn<std::string>("Major"))
                 majors[i] = magic_enum::enum_cast<StudentMajorTypes>(major).value();
         
-        std::vector<std::string> project_ids = students.GetColumn<std::string>("ProjectID");
-        std::vector<std::string> comments    = students.GetColumn<std::string>("Comments");
-        std::vector<int>         ndas        = students.GetColumn<int>("Student_NDA");
-        std::vector<int>         ips         = students.GetColumn<int>("Student_IP");
-        std::vector<std::string> campus_ids  = students.GetColumn<std::string>("campus_id");
-        std::vector<std::string> last_names  = students.GetColumn<std::string>("last_name");
-        std::vector<std::string> first_names = students.GetColumn<std::string>("first_name");
-        std::vector<std::string> on_campuss  = students.GetColumn<std::string>("OnCampus");
         
-//
-//        for (int i = 0; i < students.GetRowCount(); i++){
-//                m_students_map[campus_ids[i]] = {};
-//                m_student_project_map[campus_ids[i]] = project_ids[i];
-//                m_student_project_map[campus_ids[i]] = project_ids[i];
-//                m_project_students_map[project_ids[i]].push_back(campus_ids[i]);
-//                std::cout << first_names[i] << " " << last_names[i] << "(" << campus_ids[i] << "): " << project_ids[i] << "\n";
-//        }
+        auto project_ids = students.GetColumn<std::string>("ProjectID");
+        auto comments    = students.GetColumn<std::string>("Comments");
+        auto campus_ids  = students.GetColumn<std::string>("campus_id");
+        auto last_names  = students.GetColumn<std::string>("last_name");
+        auto first_names = students.GetColumn<std::string>("first_name");
+        auto ndas        = students.GetColumn<int>("Student_NDA");
+        auto ips         = students.GetColumn<int>("Student_IP");
+        auto on_campus   = students.GetColumn<std::string>("OnCampus");
+        std::vector<bool> on_campus_bools;
+        on_campus_bools.reserve(on_campus.size());
+        
+        for (const auto& str : on_campus){
+                if (str == "Yes")
+                        on_campus_bools.push_back("Yes");
+                else
+                        on_campus_bools.push_back("No");
+        }
+        
+        std::unordered_map<std::string, std::vector<std::string>> project_students_map;
+        for (int i = 0; i < students.GetRowCount(); i++){
+                StudentData data = {
+                        .m_major      = majors[i],
+                        .m_comment    = comments[i],
+                        .m_project_id = project_ids[i],
+                        .m_last_name  = last_names[i],
+                        .m_first_name = first_names[i],
+                        .m_campus_id  = campus_ids[i],
+                        .m_nda        = static_cast<bool>(ndas[i]),
+                        .m_ip         = static_cast<bool>(ips[i]),
+                        .m_on_campus  = on_campus_bools[i],
+                };
+                
+                m_students_map[campus_ids[i]] = data;
+                project_students_map[project_ids[i]].push_back(campus_ids[i]);
+        }
+        m_project_students_map = project_students_map;
 }
+void StudentDataHandler::parse(const std::string &body) noexcept {
+        std::stringstream sstream(body);
+        rapidcsv::Document students(sstream, rapidcsv::LabelParams(0, -1));
+        
+        std::vector<StudentMajorTypes> majors(students.GetRowCount());
+        
+        for (int i = 0; const auto& major : students.GetColumn<std::string>("Major"))
+                majors[i] = magic_enum::enum_cast<StudentMajorTypes>(major).value();
+        
+        auto project_ids = students.GetColumn<std::string>("ProjectID");
+        auto comments    = students.GetColumn<std::string>("Comments");
+        auto campus_ids  = students.GetColumn<std::string>("campus_id");
+        auto last_names  = students.GetColumn<std::string>("last_name");
+        auto first_names = students.GetColumn<std::string>("first_name");
+        auto ndas        = students.GetColumn<int>("Student_NDA");
+        auto ips         = students.GetColumn<int>("Student_IP");
+        auto on_campus   = students.GetColumn<std::string>("OnCampus");
+        std::vector<bool> on_campus_bools;
+        on_campus_bools.reserve(on_campus.size());
+        
+        for (const auto &str : on_campus){
+                if (str == "Yes")
+                        on_campus_bools.push_back("Yes");
+                else
+                        on_campus_bools.push_back("No");
+        }
+        
+        std::unordered_map<std::string, std::vector<std::string>> project_students_map;
+        for (int i = 0; i < students.GetRowCount(); i++){
+                StudentData data = {
+                        .m_major      = majors[i],
+                        .m_comment    = comments[i],
+                        .m_project_id = project_ids[i],
+                        .m_last_name  = last_names[i],
+                        .m_first_name = first_names[i],
+                        .m_campus_id  = campus_ids[i],
+                        .m_nda        = static_cast<bool>(ndas[i]),
+                        .m_ip         = static_cast<bool>(ips[i]),
+                        .m_on_campus  = on_campus_bools[i],
+                };
+                
+                m_students_map[campus_ids[i]] = data;
+                project_students_map[project_ids[i]].push_back(campus_ids[i]);
+        }
+        m_project_students_map = project_students_map;
+}
+std::unordered_map<std::string, StudentData>& StudentDataHandler::studentsMap() {
+        return m_students_map;
+}
+std::unordered_map<std::string, std::vector<std::string>>& StudentDataHandler::projectStudentsMap() {
+        return m_project_students_map;
+}
+
+InstructorDataHandler::InstructorDataHandler(const char *csv_filepath) noexcept {
+        parse(csv_filepath);
+}
+void InstructorDataHandler::parse(const char *csv_filepath) noexcept {
+        auto instructors = rapidcsv::Document(csv_filepath, rapidcsv::LabelParams(0, -1));
+        
+        std::vector<std::string> instructor_names = instructors.GetColumn<std::string>("InstructorName");
+        std::vector<std::string> project_ids      = instructors.GetColumn<std::string>("ProjectID");
+        std::unordered_map<std::string, std::vector<std::string>> instructor_projects_map;
+        
+        
+        for (int i = 0; i < instructors.GetRowCount(); i++)
+                instructor_projects_map[instructor_names[i]].push_back(project_ids[i]);
+        m_instructor_projects_map = instructor_projects_map;
+}
+std::unordered_map<std::string, std::vector<std::string>> &InstructorDataHandler::instructorProjectsMap() { return m_instructor_projects_map; }
+
+CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data)
+: m_project_data(project_data), m_student_data(student_data), m_instructor_data(instructor_data){
+
+}
+std::string CsvHandler::pretty_format(){
+        std::string ret;
+        for (const auto& instructor_projects_pair : m_instructor_data.instructorProjectsMap()){
+                ret += instructor_projects_pair.first + ":\n";
+                for (const auto& project_id : instructor_projects_pair.second){
+                        ret += "\t" + project_id + ":\n";
+                        for (const auto& student_id : (m_student_data.projectStudentsMap())[project_id])
+                                ret += "\t\t" + m_student_data.studentsMap()[student_id].m_first_name + " " + m_student_data.studentsMap()[student_id].m_last_name + "(" + student_id + ")" + "\n";
+                }
+        }
+        return ret;
+}
+std::string CsvHandler::json_format() {
+        std::string ret;
+        return std::string();
+}
+std::string CsvHandler::simple_format() {
+        std::string ret;
+        ret += "Instructor,Project,Students\n";
+        for (const auto& instructor_projects_pair : m_instructor_data.instructorProjectsMap()){
+                for (const auto& project_id : instructor_projects_pair.second){
+                        ret += instructor_projects_pair.first + "," + m_project_data.projectsMap()[project_id].m_project_title;
+                        ret += ",{";
+                        for (const auto& student_id : (m_student_data.projectStudentsMap())[project_id]){
+                                std::cout << student_id << "\n";
+                                ret += m_student_data.studentsMap()[student_id].m_first_name + " " + m_student_data.studentsMap()[student_id].m_last_name + "(" + student_id + ")" + "     ";
+                        }
+                        std::cout << "\n";
+                        ret += "}\n";
+                }
+        }
+        return ret;
+}
+
+ProjectDataHandler &CsvHandler::projectData()       { return m_project_data;    }
+StudentDataHandler &CsvHandler::studentData()       { return m_student_data;    }
+InstructorDataHandler &CsvHandler::instructorData() { return m_instructor_data; }
+

@@ -1,6 +1,5 @@
 #pragma once
 #define REQ_RES [&](const auto& req, auto& res)
-//#include "database.h"
 #include "httplib.h"
 
 

@@ -7,7 +7,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../output)
 set(PRECOMPILED_HEADER_FILES 
 		../src/rapidcsv.h
 		../src/logger.h
-		../src/database.h
 		../src/httplib.h
 		../src/csv_handler.h
 		../src/server.h
@@ -19,7 +18,6 @@ set(HEADER_FILES )
 set(SOURCE_FILES 
 		../src/logger.cpp
 		../src/csv_handler.cpp
-		../src/database.cpp
 		../src/server.cpp
 		../src/main.cpp
 		${PRECOMPILED_HEADER_FILES}

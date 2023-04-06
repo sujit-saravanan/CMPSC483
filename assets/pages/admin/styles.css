@@ -20,7 +20,7 @@
 }
 body {
   margin: 0;
-  font-family: "Roboto";
+  font-family: "Roboto", serif;
   display: flex;
   justify-content: center;
   background-color: var(--bg-light-dim);
@@ -71,11 +71,11 @@ body {
 .file-upload-button {
   color: var(--blue);
   cursor: pointer;
-  font-family: "Roboto Bold";
+  font-family: "Roboto Bold", serif;
   text-decoration: underline;
 }
 .titlebar {
-  font-family: "Roboto";
+  font-family: "Roboto", serif;
   margin-bottom: 4rem;
   width: 100%;
   background-color: var(--dark-navy);
@@ -102,7 +102,7 @@ table {
   font-family: arial, sans-serif;
   width: 100%;
   overflow: hidden;
-  border-spacing: 0px;
+  border-spacing: 0;
 }
 
 td,
@@ -115,25 +115,48 @@ th {
   color: var(--bg-light-bright);
 }
 th:first-child {
-  border-radius: 0.5rem 0rem 0rem 0rem;
+  border-radius: 0.5rem 0 0 0;
 }
 th:last-child {
-  border-radius: 0rem 0.5rem 0rem 0rem;
+  border-radius: 0 0.5rem 0 0;
 }
 
 tr:nth-child(even) {
   background-color: var(--bg-light-dim);
 }
+th {
+  min-width: 10rem;
+}
 
 #export_button {
   background-color: var(--navy);
   color: var(--bg-light-bright);
-  min-height: 0rem;
+  min-height: 0;
   font-size: 3rem;
-  padding: 1rem 0rem 1rem 0rem;
+  padding: 1rem 0 1rem 0;
   cursor: pointer;
 }
 #export_button:hover{
   background-color: var(--bg-light-bright);
   color: var(--navy);
+}
+
+label {
+  color: var(--blue);
+  cursor: pointer;
+  font-family: "Roboto Bold", serif;
+  text-decoration: underline;
+}
+#upload-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+}
+
+#current-assignments-section {
+  min-width: 70rem;
+  max-width: 70rem;
+  min-height: 50ch;
+  max-height: 50ch;
 }
