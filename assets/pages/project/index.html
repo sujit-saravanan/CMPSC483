@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="project/styles.css">
+  <link rel="icon" type="image/x-icon" href="shared/textures/learning_factory_logo.png">
+  <title>Project Assignment</title>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/home">Home</a>
+    <a href="/project" class="active">Project</a>
+    <a href="/search">Student</a>
+    <a href="/exchange">Exchange</a>
+  </div>
+  <div class="content">
+    <h1>Project Assignment</h1>
+
+    <form>
+      <label>Capstone Projects</label>
+      <table class="fixed_header">
+        <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Company Name</th>
+            <th>Primary Major</th>
+            <th>Secondary Major</th>
+            <th>Tertiary Major</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <th><input type="text" id="projectSearch" onkeyup="searchProjects()" placeholder="Search Project Name"></th>
+            <th><input type="text" id="companySearch" onkeyup="searchCompany()" placeholder="Search Comany Name"></th>
+            <th>
+              <select id="primary-select" onchange="filterMajors()">
+                <option value=""></option>
+                <option value="BME">BME</option>
+                <option value="CMPEN">CMPEN</option>
+                <option value="CMPSC">CMPSC</option>
+                <option value="DS">DS</option>
+                <option value="ED">ED</option>
+                <option value="EE">EE</option>
+                <option value="EE">EGEE</option>
+                <option value="ESC">ESC</option>
+                <option value="IE">IE</option>
+                <option value="MATSE">MATSE</option>
+                <option value="ME">ME</option>
+              </select>
+            </th>
+            <th>
+              <select id="secondary-select" onchange="filterMajors()">
+                <option value=""></option>
+                <option value="BME">BME</option>
+                <option value="CMPEN">CMPEN</option>
+                <option value="CMPSC">CMPSC</option>
+                <option value="DS">DS</option>
+                <option value="ED">ED</option>
+                <option value="EE">EE</option>
+                <option value="EE">EGEE</option>
+                <option value="ESC">ESC</option>
+                <option value="IE">IE</option>
+                <option value="MATSE">MATSE</option>
+                <option value="ME">ME</option>
+              </select>
+            </th>
+            <th>
+              <select id="tertiary-select" onchange="filterMajors()">
+                <option value=""></option>
+                <option value="BME">BME</option>
+                <option value="CMPEN">CMPEN</option>
+                <option value="CMPSC">CMPSC</option>
+                <option value="DS">DS</option>
+                <option value="ED">ED</option>
+                <option value="EE">EE</option>
+                <option value="EE">EGEE</option>
+                <option value="ESC">ESC</option>
+                <option value="IE">IE</option>
+                <option value="MATSE">MATSE</option>
+                <option value="ME">ME</option>
+              </select>
+            </th>
+            <th><button onclick="sortTotal()">Sort</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="project-card" onclick="toggleCard(this)">
+            <td>Perception</td>
+            <td>ARCCA Incorporated</td>
+            <td>CMPEN</td>
+            <td>EE</td>
+            <td>BME</td>
+            <td>4</td>
+          </tr>
+          <tr class="project-card-content" style="display:none;">
+            <td colspan="6">
+              <ul class="student-names" style="display:none;">
+                <li>John Doe</li>
+                <li>Jane Smith</li>
+                <li>Bob Johnson</li>
+              </ul>
+            </td>
+          </tr>
+          <tr class="project-card" onclick="toggleCard(this)">
+            <td>Simulation Modeling</td>
+            <td>Armstrong</td>
+            <td>IE</td>
+            <td>ME</td>
+            <td></td>
+            <td>1</td>
+          </tr>
+          <tr class="project-card-content" style="display:none;">
+            <td colspan="6">
+              <ul class="student-names" style="display:none;">
+                <li>Emily Williams</li>
+                <li>Mark Davis</li>
+                <li>Chris Brown</li>
+              </ul>
+            </td>
+          </tr>
+          <tr class="project-card" onclick="toggleCard(this)">
+            <td>3D Printing</td>
+            <td>John Crane</td>
+            <td>CMPEN</td>
+            <td>EE</td>
+            <td></td>
+            <td>6</td>
+          </tr>
+          <tr class="project-card-content" style="display:none;">
+            <td colspan="6">
+              <ul class="student-names" style="display:none;">
+                <li>Alice Green</li>
+                <li>Sam Wilson</li>
+                <li>Mike Lee</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+<script src="project/main.js"></script>
+</body>
+</html>

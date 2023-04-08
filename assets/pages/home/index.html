@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="home/styles.css">
+    <link rel="icon" type="image/x-icon" href="shared/textures/learning_factory_logo.png">
+    <title>LF Dashboard</title>
+</head>
+<body>
+<div class="navbar">
+  <a href="/home" class="active">Home</a>
+  <a href="/project">Project</a>
+  <a href="/search">Student</a>
+  <a href="/exchange">Exchange</a>
+</div>
+<div class="content">
+    <div class="main" id="main">
+        <div class="main-cards">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Completed Teams</h1>
+                    progress
+                    <button onclick="grow(5)">add5</button>
+                    <button onclick="shrink(5)">sub5</button>
+                    <button onclick="testRequest(5)">testRequest5</button>
+                </div>
+                <div class="circle" id="completed-teams-circle">
+                    <div class="inner"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h1>Assigned Students</h1>
+                    progress
+                </div>
+                <div class="circle" id="assigned-students-circle">
+                    <div class="inner"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h1>Student Major Distribution</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="home/main.js"></script>
+</body>
+</html>
+
+<!--
+<div class="card">
+    <div class="card-header">
+        <h1>Capstone Projects</h1>
+        <div class="project-container">
+            <div class="search-container">
+              <input type="text" id="projectSearch" onkeyup="searchProjects()" placeholder="Search">
+            </div>
+            <div class="project-card-container" id="projectSearch">
+              <div class="project-card">
+                <div class="project-card-header" onclick="toggleCard(this)">
+                  <h3>App Store</h3>
+                  <h4><strong>Apple</strong></h4>
+                </div>
+                <div class="project-card-body">
+                  <ul>
+                    <li>Student Name 1</li>
+                    <li>Student Name 2</li>
+                    <li>Student Name 3</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="project-card">
+                <div class="project-card-header" onclick="toggleCard(this)">
+                  <h3>Instagram</h3>
+                  <h4><strong>Meta</strong></h4>
+                </div>
+                <div class="project-card-body">
+                  <ul>
+                    <li>Student Name 4</li>
+                    <li>Student Name 5</li>
+                    <li>Student Name 6</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="project-card">
+                <div class="project-card-header" onclick="toggleCard(this)">
+                  <h3>Search Engine</h3>
+                  <h4><strong>Google</strong></h4>
+                </div>
+                <div class="project-card-body">
+                  <ul>
+                    <li>Student Name 7</li>
+                    <li>Student Name 8</li>
+                    <li>Student Name 9</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+-->

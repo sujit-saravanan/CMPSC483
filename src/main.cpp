@@ -20,6 +20,9 @@ int main() {
         const char *SUPER_SECRET_NUMBER = "780375235";
         
         auto server = (new Server())
+                ->page("/", "assets/pages/home")
+                ->page("/home", "assets/pages/home")
+                ->page("/project", "assets/pages/project")
                 ->page("/admin", "assets/pages/admin")
                 ->page("/search", "assets/pages/search")
                 ->page("/exchange", "assets/pages/exchange")
