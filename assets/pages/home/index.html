@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="home/styles.css">
+    <link rel="icon" type="image/x-icon" href="shared/textures/learning_factory_logo.png">
+    <title>LF Dashboard</title>
+</head>
+<body>
+  <nav class="navbar navbar-dark navbar-expand-lg" style="background-color: #001E44;">
+    <div class="container-fluid">
+      <a class="lf-brand" href="">
+        <img src="shared/textures/learning_factory_logo.png" alt="..." height="36">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav" style="padding-left: 10px;">
+          <a class="nav-link active" aria-current="page" href="/home">Home</a>
+          <a class="nav-link" href="/project">Project</a>
+          <a class="nav-link" href="/search">Student</a>
+          <a class="nav-link" href="/exchange">Exchange</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+<div class="content">
+    <div class="main" id="main">
+        <div class="main-cards">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Completed Teams</h1>
+                    progress
+                    <button onclick="grow(5)">add5</button>
+                    <button onclick="shrink(5)">sub5</button>
+                    <button onclick="testRequest(5)">testRequest5</button>
+                </div>
+                <div class="circle" id="completed-teams-circle">
+                    <div class="inner"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h1>Assigned Students</h1>
+                    progress
+                </div>
+                <div class="circle" id="assigned-students-circle">
+                    <div class="inner"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h1>Student Major Distribution</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+<!--<script src="home/main.js"></script>-->
+</body>
+</html>

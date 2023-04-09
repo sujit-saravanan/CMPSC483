@@ -1,4 +1,5 @@
 #include "csv_handler.h"
+
 ProjectDataHandler::ProjectDataHandler(const char *csv_filepath) noexcept {
         parse(csv_filepath);
 }

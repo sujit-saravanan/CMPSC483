@@ -1,6 +1,7 @@
 #pragma once
 #include "rapidcsv.h"
 #include "magic_enum.h"
+#include <unordered_map>
 
 // In order to add a new major, just put the same name you have in the csv here and the code will take care of the rest
 enum class StudentMajorTypes {
