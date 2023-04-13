@@ -1,4 +1,5 @@
 #include "csv_handler.h"
+using json = nlohmann::json;
 
 ProjectDataHandler::ProjectDataHandler(const char *csv_filepath) noexcept {
         parse(csv_filepath);
@@ -51,11 +52,36 @@ void ProjectDataHandler::parse(const char *csv_filepath) noexcept{
                 }
                 
                 m_projects_map[project_ids[i]] = data;
+
+                // fill in projects json
+                size_t pos = course_times[i].find("-");
+                m_projects_json[project_ids[i]]["courseTime"] = course_times[i].substr(4, pos-4);
+                m_projects_json[project_ids[i]]["courseName"] = course_names[i];
+                m_projects_json[project_ids[i]]["companyName"] = company_names[i];
+                m_projects_json[project_ids[i]]["projectTitle"] = project_titles[i];
+                m_projects_json[project_ids[i]]["confidentiality"] = confidentialities[i]? "Yes" : "No";
+                m_projects_json[project_ids[i]]["ip"] = ips[i]? "Yes" : "No";
+                m_projects_json[project_ids[i]]["physicalPrototype"] = physical_prototypes[i]? "Yes" : "No";
+                m_projects_json[project_ids[i]]["firstPreference"] = majorTypesToString(data.m_first_preference);
+                m_projects_json[project_ids[i]]["secondPreference"] = majorTypesToString(data.m_second_preference);
+                std::string thirdPreference = "";
+                for (size_t i = 0; i < data.m_third_preferences.size(); i++) {
+                        if (i == 0) {
+                                thirdPreference += majorTypesToString(data.m_third_preferences[0]);
+                        } else {
+                                thirdPreference += ", " + majorTypesToString(data.m_third_preferences[i]);
+                        }
+                        
+                }
+                m_projects_json[project_ids[i]]["thirdPreference"] = thirdPreference;
         }
-        
 }
 std::unordered_map<std::string, ProjectData> &ProjectDataHandler::projectsMap() {
         return m_projects_map;
+}
+
+json &ProjectDataHandler::projectsJson() {
+        return m_projects_json;
 }
 
 StudentDataHandler::StudentDataHandler(const char *csv_filepath) noexcept {
@@ -171,11 +197,20 @@ void InstructorDataHandler::parse(const char *csv_filepath) noexcept {
         std::unordered_map<std::string, std::vector<std::string>> instructor_projects_map;
         
         
-        for (int i = 0; i < instructors.GetRowCount(); i++)
+        for (int i = 0; i < instructors.GetRowCount(); i++) {
                 instructor_projects_map[instructor_names[i]].push_back(project_ids[i]);
+
+                // fill in projects instructor map json
+                m_projects_instructor_map_json[project_ids[i]] = instructor_names[i];
+        }         
         m_instructor_projects_map = instructor_projects_map;
+        
 }
 std::unordered_map<std::string, std::vector<std::string>> &InstructorDataHandler::instructorProjectsMap() { return m_instructor_projects_map; }
+
+json &InstructorDataHandler::projectsInstructorMapJson() {
+        return m_projects_instructor_map_json;
+}
 
 CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data)
 : m_project_data(project_data), m_student_data(student_data), m_instructor_data(instructor_data){

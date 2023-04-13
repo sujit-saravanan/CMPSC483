@@ -10,10 +10,12 @@
   <title>Project Assignment</title>
 </head>
 <body>
+
+  <!-- Navigation Bar -->
   <nav class="navbar navbar-dark navbar-expand-lg" style="background-color: #001E44;">
     <div class="container-fluid">
-      <a class="lf-brand" href="">
-        <img src="shared/textures/learning_factory_logo.png" alt="..." height="36">
+      <a class="lf-brand" href="/home">
+        <img src="shared/textures/Logo_Secondary_KnockedOut.png" alt="..." height="50">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,25 +30,41 @@
       </div>
     </div>
   </nav>
+
   <div class="content">
     <h1>Project Assignment</h1>
     <form>
       <label>Capstone Projects</label>
+  
+      <!-- Project/Company Search & Filter Header -->
+      <div class="table-responsive">
       <table class="fixed_header">
         <thead>
           <tr>
-            <th>Project Name</th>
-            <th>Company Name</th>
-            <th>Primary Major</th>
-            <th>Secondary Major</th>
-            <th>Tertiary Major</th>
-            <th>Total</th>
+            <th style="min-width: 20pc;">Project Name</th>
+            <th style="min-width: 12pc;">Company Name</th>
+            <th style="width: 8pc; min-width: 8pc;">Course Time</th>
+            <th style="width: 7pc; min-width: 6pc;">Primary</th>
+            <th style="width: 7pc; min-width: 6pc;">Secondary</th>
+            <th style="width: 7pc; min-width: 6pc;">Tertiary</th>
+            <th style="text-align: center;">Total</th>
           </tr>
           <tr>
-            <th><input type="text" id="projectSearch" onkeyup="searchProjects()" placeholder="Search Project Name"></th>
-            <th><input type="text" id="companySearch" onkeyup="searchCompany()" placeholder="Search Comany Name"></th>
+            <!-- Search Project Name -->
+            <th><input type="text" id="projectSearch" onkeyup="searchAndFilter()" placeholder="Search Project" style="width: 100%;"></th>
+            <!-- Search Company Name -->
+            <th><input type="text" id="companySearch" onkeyup="searchAndFilter()" placeholder="Search Comany" style="width: 100%;"></th>
+            <!-- Filter by Course Time -->
             <th>
-              <select id="primary-select" onchange="filterMajors()">
+              <select id="coursetime-select" onchange="searchAndFilter()" style="width: 100%;">
+                <option value=""></option>
+                <option value="T R 8:00 am-9:55 am">8:00 am</option>
+                <option value="T R 11:15 am-1:10 pm">11:15 am</option>
+              </select>
+            </th>
+            <!-- Filter by Primary Major -->
+            <th>
+              <select id="primary-select" onchange="searchAndFilter()" style="width: 100%;">
                 <option value=""></option>
                 <option value="BME">BME</option>
                 <option value="CMPEN">CMPEN</option>
@@ -54,15 +72,16 @@
                 <option value="DS">DS</option>
                 <option value="ED">ED</option>
                 <option value="EE">EE</option>
-                <option value="EE">EGEE</option>
+                <option value="EGEE">EGEE</option>
                 <option value="ESC">ESC</option>
                 <option value="IE">IE</option>
                 <option value="MATSE">MATSE</option>
                 <option value="ME">ME</option>
               </select>
             </th>
+            <!-- Filter by Secondary Major -->
             <th>
-              <select id="secondary-select" onchange="filterMajors()">
+              <select id="secondary-select" onchange="searchAndFilter()" style="width: 100%;">
                 <option value=""></option>
                 <option value="BME">BME</option>
                 <option value="CMPEN">CMPEN</option>
@@ -70,15 +89,16 @@
                 <option value="DS">DS</option>
                 <option value="ED">ED</option>
                 <option value="EE">EE</option>
-                <option value="EE">EGEE</option>
+                <option value="EGEE">EGEE</option>
                 <option value="ESC">ESC</option>
                 <option value="IE">IE</option>
                 <option value="MATSE">MATSE</option>
                 <option value="ME">ME</option>
               </select>
             </th>
+            <!-- Filter by Tertiary Major -->
             <th>
-              <select id="tertiary-select" onchange="filterMajors()">
+              <select id="tertiary-select" onchange="searchAndFilter()" style="width: 100%;">
                 <option value=""></option>
                 <option value="BME">BME</option>
                 <option value="CMPEN">CMPEN</option>
@@ -86,433 +106,193 @@
                 <option value="DS">DS</option>
                 <option value="ED">ED</option>
                 <option value="EE">EE</option>
-                <option value="EE">EGEE</option>
+                <option value="EGEE">EGEE</option>
                 <option value="ESC">ESC</option>
                 <option value="IE">IE</option>
                 <option value="MATSE">MATSE</option>
                 <option value="ME">ME</option>
               </select>
             </th>
-            <th><button onclick="sortTotal()">Sort</button></th>
+            <!-- Sort by Total # of Members in Project (Ascending/Descending Order) -->
+            <th><div class="text-center"><button onclick="sortTotal()">Sort</button></div></th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="project-card" onclick="toggleCard(this)">
-            <td>Perception</td>
-            <td>ARCCA Incorporated</td>
-            <td>CMPEN</td>
-            <td>EE</td>
-            <td>BME</td>
-            <td>4</td>
-          </tr>
-          <tr class="project-card-content" style="display:none;">
-            <td colspan="6">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Course Name</th>
-                    <th scope="col">Course Time</th>
-                    <th scope="col">Instructor Name</th>
-                    <th scope="col">IP</th>
-                    <th scope="col">NDA</th>
-                    <th scope="col">Physical Prototype</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <td>CMPEN 482</td>
-                  <td>T R 8:00am-9:55am</td>
-                  <td>Choi Kyusun</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>1</td>
-                </tbody>
-              </table>
-              <label>Project Roster</label>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Major</th>
-                    <th scope="col">Preferred</th>
-                    <th scope="col">Comments</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table-success">
-                    <th scope="row">1</th>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>CMPEN</td>
-                    <td>Yes</td>
-                    <td>asdlfjdslagndslankgdfgnkflds;</td>
-                  </tr>
-                  <tr class="table-warning">
-                    <th scope="row">2</th>
-                    <td>Jane</td>
-                    <td>Smith</td>
-                    <td>EE</td>
-                    <td>Yes</td>
-                    <td>dfslnkbnldsf</td>
-                  </tr>
-                  <tr class="table-info">
-                    <th scope="row">3</th>
-                    <td>Bob</td>
-                    <td>Johnson</td>
-                    <td>BME</td>
-                    <td>No</td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                  Edit Project Roster
-                </button>
-              </div>
-              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <div class="text-center">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Customize Project Roster</h1>
-                      </div>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <label>Current Members</label>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Major</th>
-                            <th scope="col">Preferred</th>
-                            <th scope="col">Comments</th>
-                            <th scope="col">Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="table-success">
-                            <th scope="row">1</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>CMPEN</td>
-                            <td>Yes</td>
-                            <td>asdlfjdslagndslankgdfgnkflds;</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-warning">
-                            <th scope="row">2</th>
-                            <td>Jane</td>
-                            <td>Smith</td>
-                            <td>EE</td>
-                            <td>Yes</td>
-                            <td>dfslnkbnldsf</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-info">
-                            <th scope="row">3</th>
-                            <td>Bob</td>
-                            <td>Johnson</td>
-                            <td>BME</td>
-                            <td>No</td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <label>Student List</label>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Major</th>
-                            <th scope="col">Preferred</th>
-                            <th scope="col">Comments</th>
-                            <th scope="col">Add</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="table-success">
-                            <th scope="row">1</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>CMPEN</td>
-                            <td>Yes</td>
-                            <td>asdlfjdslagndslankgdfgnkflds;</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                O
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-warning">
-                            <th scope="row">2</th>
-                            <td>Jane</td>
-                            <td>Smith</td>
-                            <td>EE</td>
-                            <td>Yes</td>
-                            <td>dfslnkbnldsf</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                O
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-info">
-                            <th scope="row">3</th>
-                            <td>Bob</td>
-                            <td>Johnson</td>
-                            <td>BME</td>
-                            <td>No</td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                O
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Update</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          
 
-          <tr class="project-card" onclick="toggleCard(this)">
-            <td>Simulation Modeling</td>
-            <td>Armstrong Industries</td>
-            <td>IE</td>
-            <td>ME</td>
-            <td></td>
-            <td>1</td>
-          </tr>
-          <tr class="project-card-content" style="display:none;">
-            <td colspan="6">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Course Name</th>
-                    <th scope="col">Course Time</th>
-                    <th scope="col">Instructor Name</th>
-                    <th scope="col">IP</th>
-                    <th scope="col">NDA</th>
-                    <th scope="col">Physical Prototype</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <td>CMPEN 482</td>
-                  <td>T R 8:00am-9:55am</td>
-                  <td>Choi Kyusun</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>1</td>
-                </tbody>
-              </table>
-              <label>Project Roster</label>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Major</th>
-                    <th scope="col">Preferred</th>
-                    <th scope="col">Comments</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table-success">
-                    <th scope="row">1</th>
-                    <td>Emily</td>
-                    <td>Wilson</td>
-                    <td>IE</td>
-                    <td>Yes</td>
-                    <td>asdlfjdslagndslankgdfgnkflds;</td>
-                  </tr>
-                  <tr class="table-info">
-                    <th scope="row">2</th>
-                    <td>Mark</td>
-                    <td>Davis</td>
-                    <td>EE</td>
-                    <td>No</td>
-                    <td>dfslnkbnldsf</td>
-                  </tr>
-                  <tr class="table-info">
-                    <th scope="row">3</th>
-                    <td>Chris</td>
-                    <td>Brown</td>
-                    <td>DS</td>
-                    <td>No</td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                  Edit Project Roster
-                </button>
-              </div>
-              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <div class="text-center">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Customize Project Roster</h1>
-                      </div>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <label>Current Members</label>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Major</th>
-                            <th scope="col">Preferred</th>
-                            <th scope="col">Comments</th>
-                            <th scope="col">Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="table-success">
-                            <th scope="row">1</th>
-                            <td>Emily</td>
-                            <td>Wilson</td>
-                            <td>IE</td>
-                            <td>Yes</td>
-                            <td>asdlfjdslagndslankgdfgnkflds;</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-info">
-                            <th scope="row">2</th>
-                            <td>Mark</td>
-                            <td>Davis</td>
-                            <td>EE</td>
-                            <td>No</td>
-                            <td>dfslnkbnldsf</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-info">
-                            <th scope="row">3</th>
-                            <td>Chris</td>
-                            <td>Brown</td>
-                            <td>DS</td>
-                            <td>No</td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                X
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <label>Student List</label>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Major</th>
-                            <th scope="col">Preferred</th>
-                            <th scope="col">Comments</th>
-                            <th scope="col">Add</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="table-success">
-                            <th scope="row">1</th>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>CMPEN</td>
-                            <td>Yes</td>
-                            <td>asdlfjdslagndslankgdfgnkflds;</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                O
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-warning">
-                            <th scope="row">2</th>
-                            <td>Jane</td>
-                            <td>Smith</td>
-                            <td>EE</td>
-                            <td>Yes</td>
-                            <td>dfslnkbnldsf</td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                O
-                              </button>
-                            </td>
-                          </tr>
-                          <tr class="table-info">
-                            <th scope="row">3</th>
-                            <td>Bob</td>
-                            <td>Johnson</td>
-                            <td>BME</td>
-                            <td>No</td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-primary">
-                                O
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Update</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
+          <!-- All Project Cards -->
+          <tbody id="project-info">
+            <!-- filled in by getProjectData() -->
+          </tbody>
+          </table>
+          </div>
         </tbody>
       </table>
     </form>
   </div>
+
+  <template id="project-card-temp">
+    <tr class="project-card" onclick="toggleCard(this)">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr class="project-card-content" style="display:none;">
+      <td colspan="7">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Course Name</th>
+              <th scope="col">Course Time</th>
+              <th scope="col">Instructor Name</th>
+              <th scope="col">IP</th>
+              <th scope="col">NDA</th>
+              <th scope="col">Physical Prototype</th>
+              <th scope="col">US Citizenship</th>
+            </tr>
+          </thead>
+          <tbody>
+            <td style="width: 10pc;"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>No</td>
+          </tbody>
+        </table>
+        <label>Project Roster</label>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Major</th>
+              <th scope="col">Preferred</th>
+              <th scope="col">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+        <div class="text-center">
+          <button id="customizeMenu" type="button" class="btn btn-primary" data-bs-toggle="modal" style="color: #fff; background-color: #006699;">
+            Edit Project Roster
+          </button>
+        </div>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <div class="text-center">
+                  <h2 class="modal-title fs-5" id="staticBackdropLabel">Customize Project Roster</h1>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <label>Current Members</label>
+                <table class="table" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">First</th>
+                      <th scope="col">Last</th>
+                      <th scope="col">Major</th>
+                      <th scope="col">Preferred</th>
+                      <th scope="col">Comments</th>
+                      <th scope="col">Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <th scope="row"></th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                  </tbody>
+                </table>
+                <label>Student List</label>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th style="width: 1px; min-width: 1px;">Major</th>
+                      <th>Preferred</th>
+                      <th>Comments</th>
+                      <th>Assigned</th>
+                      <th>Add</th>
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <!-- Search Student First Name -->
+                      <th><input type="text" id="firstNameSearch" onkeyup="searchAndFilterStudent()" placeholder="Search Name" style="width: 100%;"></th>
+                      <!-- Search Student Last Name -->
+                      <th><input type="text" id="lastNameSearch" onkeyup="searchAndFilterStudent()" placeholder="Search Name" style="width: 100%;"></th>
+                      <!-- Filter by Student Major -->
+                      <th>
+                        <select id="studentMajor-select" onchange="searchAndFilterStudent()" style="width: 4pc; min-width: 3pc;">
+                          <option value=""></option>
+                          <option value="BME">BME</option>
+                          <option value="CMPEN">CMPEN</option>
+                          <option value="CMPSC">CMPSC</option>
+                          <option value="DS">DS</option>
+                          <option value="ED">ED</option>
+                          <option value="EE">EE</option>
+                          <option value="EGEE">EGEE</option>
+                          <option value="ESC">ESC</option>
+                          <option value="IE">IE</option>
+                          <option value="MATSE">MATSE</option>
+                          <option value="ME">ME</option>
+                        </select>
+                      </th>
+                      <!-- Filter by Student Preference -->
+                      <th>
+                        <select id="studentPrefer-select" onchange="searchAndFilterStudent()">
+                          <option value=""></option>
+                          <option value="1">Yes</option>
+                          <option value="0">No</option>
+                          <option value="2">-</option>
+                        </select>
+                      </th>
+                      <th></th>
+                      <!-- Filter by Student Assigned -->
+                      <th>
+                        <select id="studentPrefer-select" onchange="searchAndFilterStudent()">
+                          <option value=""></option>
+                          <option value="1">None</option>
+                        </select>
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </template>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 <script src="project/main.js"></script>
+<script>getProjectData();</script>
 </body>
 </html>

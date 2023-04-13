@@ -2,6 +2,8 @@
 #include "rapidcsv.h"
 #include "magic_enum.h"
 #include <unordered_map>
+#include "json.hpp"
+using json = nlohmann::json;
 
 // In order to add a new major, just put the same name you have in the csv here and the code will take care of the rest
 enum class StudentMajorTypes {
@@ -17,6 +19,23 @@ enum class StudentMajorTypes {
         MATSE,
         ME,
 };
+
+inline std::string majorTypesToString(StudentMajorTypes major) {
+    switch (major) {
+        case StudentMajorTypes::BME:   return "BME";
+        case StudentMajorTypes::CMPEN: return "CMPEN";
+        case StudentMajorTypes::CMPSC: return "CMPSC";
+        case StudentMajorTypes::DS:    return "DS"; 
+        case StudentMajorTypes::ED:    return "ED";
+        case StudentMajorTypes::EE:    return "EE";
+        case StudentMajorTypes::EGEE:  return "EGEE";
+        case StudentMajorTypes::ESC:   return "ESC";
+        case StudentMajorTypes::IE:    return "IE";
+        case StudentMajorTypes::MATSE: return "MATSE";
+        case StudentMajorTypes::ME:    return "ME";
+        default:                       return "";
+    }
+}
 
 struct StudentData {
         StudentMajorTypes m_major;
@@ -53,9 +72,11 @@ public:
 public:
         void parse(const char* csv_filepath) noexcept;
         std::unordered_map<std::string, ProjectData>& projectsMap();
+        json &projectsJson();
         
 private:
         std::unordered_map<std::string, ProjectData> m_projects_map;
+        json m_projects_json;
 };
 
 
@@ -87,9 +108,11 @@ public:
 public:
         void parse(const char* csv_filepath) noexcept;
         std::unordered_map<std::string, std::vector<std::string>> &instructorProjectsMap();
+        json &projectsInstructorMapJson();
         
 private:
         std::unordered_map<std::string, std::vector<std::string>> m_instructor_projects_map;
+        json m_projects_instructor_map_json;
 };
 
 
