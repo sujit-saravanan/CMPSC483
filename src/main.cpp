@@ -1,6 +1,8 @@
 #include "server.h"
 #include <unordered_map>
 #include "csv_handler.h"
+#include "json.hpp"
+using json = nlohmann::json;
 
 
 const char *HOST = "localhost";
@@ -47,6 +49,16 @@ int main() {
                 ->get("/simple_csv_get", REQ_RES {
                         std::cout << "requested CSV update\n";
                         res.set_content(handler.simple_format(), "text/csv");
+                })
+                ->get("/project_json", REQ_RES {
+                        json data = handler.projectData().projectsJson();
+                        res.set_header("Content-Type", "text/json");
+                        res.set_content(data.dump(), "text/json");
+                })
+                ->get("/project_instructor_map", REQ_RES {
+                        json data = handler.instructorData().projectsInstructorMapJson();
+                        res.set_header("Content-Type", "text/json");
+                        res.set_content(data.dump(), "text/json");
                 });
         
         server->post("/csv", REQ_RES {

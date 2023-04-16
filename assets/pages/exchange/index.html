@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+	<link rel="icon" type="image/x-icon" href="shared/textures/learning_factory_logo.png">
 	<title>Student Exchange</title>
 	<style>
 		body {
 			background-color: #f5f5f5;
 			font-family: Arial, sans-serif;
+		}
+		.content{
+			padding-top: 30px;
 		}
 		h1 {
 			color: #006699;
@@ -55,39 +63,61 @@
 	</style>
 </head>
 <body>
+	<nav class="navbar navbar-dark navbar-expand-lg" style="background-color: #001E44;">
+        <div class="container-fluid">
+          <a class="lf-brand" href="/home">
+            <img src="shared/textures/Logo_Secondary_KnockedOut.png" alt="..." height="50">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav" style="padding-left: 10px;">
+              <a class="nav-link" aria-current="page" href="/home">Home</a>
+              <a class="nav-link" href="/project">Project</a>
+              <a class="nav-link" href="/search">Student</a>
+              <a class="nav-link active" href="/exchange">Exchange</a>
+            </div>
+          </div>
+        </div>
+    </nav>
+	<div class="content">
 	<h1>Student Exchange</h1>
-	<form>
-		<label for="team-select">Select Team:</label>
-		<select id="team-select">
-			<option value="team1">Team 1</option>
-			<option value="team2">Team 2</option>
-			<option value="team3">Team 3</option>
-		</select>
+		<form>
+			<label for="team-select">Select Team:</label>
+			<select id="team-select">
+				<option value="team1">Team 1</option>
+				<option value="team2">Team 2</option>
+				<option value="team3">Team 3</option>
+			</select>
 
-		<label for="member-select">Select Member:</label>
-		<select id="member-select">
-			<option value="">Select a team first</option>
-		</select>
+			<label for="member-select">Select Member:</label>
+			<select id="member-select">
+				<option value="">Select a team first</option>
+			</select>
 
-		<label for="new-team-select">Assign to new team:</label>
-		<select id="new-team-select">
-			<option value="team1">Team 1</option>
-			<option value="team2">Team 2</option>
-			<option value="team3">Team 3</option>
-		</select>
+			<label for="new-team-select">Assign to new team:</label>
+			<select id="new-team-select">
+				<option value="team1">Team 1</option>
+				<option value="team2">Team 2</option>
+				<option value="team3">Team 3</option>
+			</select>
 
-		<button type="submit">Assign to new team</button>
-	</form>
+			<button type="submit">Assign to new team</button>
+		</form>
 
-	<div class="member-list">
-		<h2>Team 1 Members</h2>
-		<ul>
-			<li>Member 1</li>
-			<li>Member 2</li>
-			<li>Member 3</li>
-		</ul>
+		<div class="member-list">
+			<h2>Team 1 Members</h2>
+			<ul>
+				<li>Member 1</li>
+				<li>Member 2</li>
+				<li>Member 3</li>
+			</ul>
+		</div>
 	</div>
 
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 	<script>
 		// Function to update the member list based on the selected team
 		function updateMemberList() {

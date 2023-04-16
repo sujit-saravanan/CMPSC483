@@ -21,8 +21,10 @@
 body {
   margin: 0;
   font-family: "Roboto", serif;
+  /*
   display: flex;
   justify-content: center;
+  */
   background-color: var(--bg-light-dim);
 }
 .sections {
