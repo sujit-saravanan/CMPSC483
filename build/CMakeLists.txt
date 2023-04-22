@@ -9,6 +9,7 @@ set(PRECOMPILED_HEADER_FILES
 		../src/logger.h
 		../src/httplib.h
 		../src/csv_handler.h
+		../src/json.hpp
 		../src/server.h
 		../src/rang.h
 		../src/magic_enum.h)
