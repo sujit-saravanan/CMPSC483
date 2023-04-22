@@ -6,3 +6,4 @@ tools
 example.db
 .idea/*
 .vscode/*
+!src/compiled
