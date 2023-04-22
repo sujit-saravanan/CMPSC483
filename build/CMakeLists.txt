@@ -10,6 +10,7 @@ set(PRECOMPILED_HEADER_FILES
 		../src/httplib.h
 		../src/csv_handler.h
 		../src/json.hpp
+		../src/json.h
 		../src/server.h
 		../src/rang.h
 		../src/magic_enum.h)

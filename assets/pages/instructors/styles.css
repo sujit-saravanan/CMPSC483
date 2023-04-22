@@ -1,0 +1,70 @@
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"), url("../shared/fonts/Roboto-Regular.woff2");
+}
+@font-face {
+  font-family: "Roboto Bold";
+  src: local("Roboto Bold"), url("../shared/fonts/Roboto-Bold.woff2");
+}
+
+:root {
+  --navy: #001e44;
+  --dark-navy: #262c3a;
+  --blue: #1e407c;
+
+  --creek: #3ea39e;
+  --slate: #314e64;
+
+  --bg-light-dim: #f5f5f5;
+  --bg-light-bright: #ffffff;
+}
+body {
+  margin: 0;
+  font-family: "Roboto", serif;
+  display: flex;
+  justify-content: center;
+  background-color: var(--bg-light-dim);
+}
+.sections {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+
+
+.titlebar {
+  font-family: "Roboto", serif;
+  width: 100%;
+  background-color: var(--dark-navy);
+  color: var(--bg-light-bright);
+}
+.titlebar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem;
+  gap: 1rem;
+}
+.titlebar img {
+  height: 5rem;
+}
+.titlebar-container .header {
+  font-size: 3rem;
+}
+.titlebar-container .subheader {
+  font-size: 2rem;
+}
+
+
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+
+  font-family: "Roboto", serif;
+  width: 100%;
+  background-color: var(--bg-light-dim);
+}
