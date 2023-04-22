@@ -4,4 +4,5 @@ output/*
 !output/.gitkeep
 tools
 example.db
-.idea
+.idea/*
+.vscode/*
