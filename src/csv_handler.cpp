@@ -187,9 +187,54 @@ void InstructorDataHandler::parse(const char *csv_filepath) noexcept {
 }
 std::unordered_map<std::string, std::vector<std::string>> &InstructorDataHandler::instructorProjectsMap() { return m_instructor_projects_map; }
 
-CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data)
+CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data, const char *unassigned_students_csv_filepath)
         : m_project_data(project_data), m_student_data(student_data), m_instructor_data(instructor_data) {
+        auto students = rapidcsv::Document(unassigned_students_csv_filepath, rapidcsv::LabelParams(0, -1));
+        std::vector<std::string> first_names = students.GetColumn<std::string>("First Name");
+        std::vector<std::string> last_names = students.GetColumn<std::string>("Last Name");
+        std::vector<std::string> campus_ids = students.GetColumn<std::string>("E-mail Address");
+        for (auto &email: campus_ids) {
+                size_t at_location = email.find_first_of('@');
+                email.resize(at_location);
+//                std::cout << email << "\n";
+        }
+        for (const auto &id: campus_ids)
+                std::cout << id << "\n";
+        std::vector<std::string> courses = students.GetColumn<std::string>("Course");
+        std::vector<StudentMajorTypes> majors;
+        majors.reserve(courses.size());
+        for (const auto &course: courses) {
+                size_t gap_location = course.find_first_of(' ');
+                auto major = course.substr(0, gap_location);
+                
+                if (magic_enum::enum_cast<StudentMajorTypes>(major).has_value())
+                        majors.push_back(magic_enum::enum_cast<StudentMajorTypes>(major).value());
+                else if (major == "EDSGN")
+                        majors.push_back(StudentMajorTypes::ED);
+        }
         
+        std::cout << first_names.size() << "\n";
+        std::cout << last_names.size() << "\n";
+        std::cout << campus_ids.size() << "\n";
+        std::cout << courses.size() << "\n";
+        std::cout << majors.size() << "\n";
+        
+        
+        for (int i = 0; i < majors.size(); i++) {
+                StudentData data = {
+                        .m_major      = majors[i],
+                        .m_comment    = "",
+                        .m_project_id = "",
+                        .m_last_name  = last_names[i],
+                        .m_first_name = first_names[i],
+                        .m_campus_id  = campus_ids[i],
+                        .m_nda        = true,
+                        .m_ip         = true,
+                        .m_on_campus  = true,
+                };
+                
+                m_unnasigned_students.emplace_back(data);
+        }
 }
 std::string CsvHandler::pretty_format() {
         std::string ret;
@@ -216,25 +261,25 @@ std::string CsvHandler::pretty_format() {
 
 
 
-ProjectHealth CsvHandler::rateHealth(const ProjectData &project_data, const std::vector<std::string> &students){
+ProjectHealth CsvHandler::rateHealth(const ProjectData &project_data, const std::vector<std::string> &students) {
         if (students.size() <= 3)
                 return ProjectHealth::dangerous;
         
         int score = 0;
         bool has_primary = false;
-        for (const auto &student_id : students){
+        for (const auto &student_id: students) {
                 auto student_data = (studentData().studentsMap())[student_id];
-                if (student_data.m_major == project_data.m_first_preference){
+                if (student_data.m_major == project_data.m_first_preference) {
                         score += 3;
                         has_primary = true;
                         continue;
                 }
-                if (student_data.m_major == project_data.m_second_preference){
+                if (student_data.m_major == project_data.m_second_preference) {
                         score += 2;
                         continue;
                 }
-                for (auto major : project_data.m_third_preferences){
-                        if (student_data.m_major == major){
+                for (auto major: project_data.m_third_preferences) {
+                        if (student_data.m_major == major) {
                                 score += 1;
                                 break;
                         }
@@ -255,25 +300,34 @@ std::string CsvHandler::json_format() {
         for (const auto &instructor_projects_pair: m_instructor_data.instructorProjectsMap()) {
                 for (const auto &project_id: instructor_projects_pair.second) {
                         auto project_data = (projectData().projectsMap())[project_id];
-                        ret[instructor_projects_pair.first][project_id]["project-title"] = project_data.m_project_title;
-                        ret[instructor_projects_pair.first][project_id]["company-name"] = project_data.m_company_name;
-                        ret[instructor_projects_pair.first][project_id]["first-preference"] = project_data.m_first_preference;
-                        ret[instructor_projects_pair.first][project_id]["second-preference"] = project_data.m_second_preference;
-                        ret[instructor_projects_pair.first][project_id]["third-preferences"] = project_data.m_third_preferences;
-                        ret[instructor_projects_pair.first][project_id]["nda"] = project_data.m_confidentiality;
-                        ret[instructor_projects_pair.first][project_id]["ip"] = project_data.m_ip;
-                        ret[instructor_projects_pair.first][project_id]["health"] = rateHealth(project_data, (studentData().projectStudentsMap())[project_id]);
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["project-title"] = project_data.m_project_title;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["company-name"] = project_data.m_company_name;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["first-preference"] = project_data.m_first_preference;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["second-preference"] = project_data.m_second_preference;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["third-preferences"] = project_data.m_third_preferences;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["nda"] = project_data.m_confidentiality;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["ip"] = project_data.m_ip;
+                        ret["Assigned Students"][instructor_projects_pair.first][project_id]["health"] = rateHealth(project_data, (studentData().projectStudentsMap())[project_id]);
                         
                         for (const auto &student_id: (studentData().projectStudentsMap())[project_id]) {
                                 auto student_data = (studentData().studentsMap())[student_id];
-                                ret[instructor_projects_pair.first][project_id]["students"][student_id]["major"] = student_data.m_major;
-                                ret[instructor_projects_pair.first][project_id]["students"][student_id]["first-name"] = student_data.m_first_name;
-                                ret[instructor_projects_pair.first][project_id]["students"][student_id]["last-name"] = student_data.m_last_name;
-                                ret[instructor_projects_pair.first][project_id]["students"][student_id]["nda"] = student_data.m_nda;
-                                ret[instructor_projects_pair.first][project_id]["students"][student_id]["ip"] = student_data.m_ip;
-                                ret[instructor_projects_pair.first][project_id]["students"][student_id]["on-campus"] = student_data.m_on_campus;
+                                ret["Assigned Students"][instructor_projects_pair.first][project_id]["students"][student_id]["major"] = student_data.m_major;
+                                ret["Assigned Students"][instructor_projects_pair.first][project_id]["students"][student_id]["first-name"] = student_data.m_first_name;
+                                ret["Assigned Students"][instructor_projects_pair.first][project_id]["students"][student_id]["last-name"] = student_data.m_last_name;
+                                ret["Assigned Students"][instructor_projects_pair.first][project_id]["students"][student_id]["nda"] = student_data.m_nda;
+                                ret["Assigned Students"][instructor_projects_pair.first][project_id]["students"][student_id]["ip"] = student_data.m_ip;
+                                ret["Assigned Students"][instructor_projects_pair.first][project_id]["students"][student_id]["on-campus"] = student_data.m_on_campus;
                         }
                 }
+        }
+        
+        for (const auto &student: m_unnasigned_students) {
+                ret["Unassigned Students"][student.m_campus_id]["major"] = student.m_major;
+                ret["Unassigned Students"][student.m_campus_id]["first-name"] = student.m_first_name;
+                ret["Unassigned Students"][student.m_campus_id]["last-name"] = student.m_last_name;
+                ret["Unassigned Students"][student.m_campus_id]["nda"] = student.m_nda;
+                ret["Unassigned Students"][student.m_campus_id]["ip"] = student.m_ip;
+                ret["Unassigned Students"][student.m_campus_id]["on-campus"] = student.m_on_campus;
         }
         return ret.dump(4);
 }

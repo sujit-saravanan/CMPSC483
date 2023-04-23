@@ -10,8 +10,8 @@ int main() {
         auto project_data    = ProjectDataHandler("assets/data/projectsFinal.csv");
         auto student_data    = StudentDataHandler("assets/data/studentAssignments.csv");
         auto instructor_data = InstructorDataHandler("assets/data/sectionInfo.csv");
-        CsvHandler handler   = CsvHandler(project_data, student_data, instructor_data);
-//        std::cout << handler.json_format() << "\n";
+        CsvHandler handler   = CsvHandler(project_data, student_data, instructor_data, "assets/data/students without prefs.csv");
+        std::cout << handler.json_format() << "\n";
         
         auto server = (new Server())
                 ->page("/", "assets/pages/home")
@@ -20,7 +20,7 @@ int main() {
                 ->page("/admin", "assets/pages/admin")
                 ->page("/search", "assets/pages/search")
                 ->page("/exchange", "assets/pages/exchange")
-                ->page("/test", "assets/pages/test")
+                ->page("/assignments", "assets/pages/assignments")
                 ->page("/shared", "assets/shared");
         
         server->get("/export_csv", REQ_RES {

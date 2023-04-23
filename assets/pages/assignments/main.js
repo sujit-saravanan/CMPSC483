@@ -1,51 +1,3 @@
-// RETURN JSON FORMAT:
-// "Zoubeida Ounaies": {  // INSTRUCTOR NAME
-//     "11cb5989-0c5e-4": {  // PROJECT ID
-//         "company-name": "PSU Convergence Center for Living Multifunctional Material Systems (LiMC2) 1",
-//             "first-preference": 5,
-//             "ip": false,
-//             "nda": false,
-//             "project-title": "Fabrication of a three - terminal neuromorphic material test bed",
-//             "second-preference": 10,
-//             "students": {
-//             "JVO5227": {
-//                 "first-name": "Jesse",
-//                     "ip": true,
-//                     "last-name": "Orrs",
-//                     "major": 0,
-//                     "nda": true,
-//                     "on-campus": true
-//             },
-//             "MAP6150": {
-//                 "first-name": "Megan",
-//                     "ip": true,
-//                     "last-name": "Paonessa",
-//                     "major": 0,
-//                     "nda": true,
-//                     "on-campus": true
-//             },
-//             "MBW5318": {
-//                 "first-name": "Michael",
-//                     "ip": true,
-//                     "last-name": "Williams",
-//                     "major": 0,
-//                     "nda": true,
-//                     "on-campus": true
-//             },
-//             "MUO53": {
-//                 "first-name": "Matthew",
-//                     "ip": true,
-//                     "last-name": "Orehek",
-//                     "major": 0,
-//                     "nda": true,
-//                     "on-campus": true
-//             }
-//         },
-//         "third-preference": [
-//             9
-//         ]
-//     },
-
 const StudentMajorTypes = ["BME", "CMPEN", "CMPSC", "DS", "ED", "EE", "EGEE", "ESC", "IE", "MATSE", "ME"];
 async function get_InstructorProjectStudentTree() {
     const res = await fetch("/instructor_project_student_tree_get");
@@ -88,7 +40,7 @@ async function createInstructorDropDown() {
         generateAssignedProjectCardsAll();
     }
     dropdown_content.appendChild(all_anchor);
-    for (let instructor in data){
+    for (let instructor in data["Assigned Students"]){
         let instructor_anchor = document.createElement("a");
         instructor_anchor.appendChild(document.createTextNode(instructor));
         instructor_anchor.onclick = async ()=>{
@@ -237,6 +189,9 @@ function createCard(project){
     ret.appendChild(projectContent);
     return ret
 }
+
+
+
 async function generateAssignedProjectCards(instructor_name) {
     let card_title = document.getElementById("current_instructor_view_title");
     card_title.innerText = instructor_name + "'s Assignments";
@@ -247,12 +202,46 @@ async function generateAssignedProjectCards(instructor_name) {
         assigned_list.removeChild(assigned_list.firstChild)
     }
 
-    for (const project_id in data[instructor_name]){
-        const project = data[instructor_name][project_id];
+    for (const project_id in data["Assigned Students"][instructor_name]){
+        const project = data["Assigned Students"][instructor_name][project_id];
         assigned_list.appendChild(createCard(project));
     }
 
 
+}
+
+async function generateUnassignedStudentCardsAll() {
+    const data = await get_InstructorProjectStudentTree();
+    const unassigned_list = document.getElementById("unassigned-list");
+
+    while (unassigned_list.firstChild) {
+        unassigned_list.removeChild(unassigned_list.firstChild)
+    }
+
+    let students = data["Unassigned Students"];
+    for (let student_id in data["Unassigned Students"]){
+        let student = students[student_id]
+        const UnassignedStudentInfo = document.createElement("div");
+        UnassignedStudentInfo.classList.add("unassigned-student-info");
+
+        const UnassignedStudentNameMajor = document.createElement("table");
+        UnassignedStudentNameMajor.classList.add("unassigned-student-name-major");
+        let UnassignedStudentNameMajorTBody = UnassignedStudentNameMajor.createTBody();
+        createRequirementsTR(UnassignedStudentNameMajorTBody, "First Name:", student["first-name"]);
+        createRequirementsTR(UnassignedStudentNameMajorTBody, "Last Name:", student["last-name"]);
+        createRequirementsTR(UnassignedStudentNameMajorTBody, "Major:", StudentMajorTypes[student["major"]]);
+
+
+        const UnassignedStudentRequirements = document.createElement("table");
+        UnassignedStudentRequirements.classList.add("unassigned-student-requirements");
+        let UnassignedStudentRequirementsTBody = UnassignedStudentRequirements.createTBody();
+        createRequirementsTR(UnassignedStudentRequirementsTBody, "NDA:", YesNo(student["nda"]));
+        createRequirementsTR(UnassignedStudentRequirementsTBody, "IP:", YesNo(student["ip"]));
+
+        UnassignedStudentInfo.appendChild(UnassignedStudentNameMajor);
+        UnassignedStudentInfo.appendChild(UnassignedStudentRequirements);
+        unassigned_list.appendChild(UnassignedStudentInfo);
+    }
 }
 
 async function generateAssignedProjectCardsAll() {
@@ -266,9 +255,9 @@ async function generateAssignedProjectCardsAll() {
         assigned_list.removeChild(assigned_list.firstChild)
     }
 
-    for (let instructor_name in data){
-        for (const project_id in data[instructor_name]){
-            const project = data[instructor_name][project_id];
+    for (let instructor_name in data["Assigned Students"]){
+        for (const project_id in data["Assigned Students"][instructor_name]){
+            const project = data["Assigned Students"][instructor_name][project_id];
             assigned_list.appendChild(createCard(project));
         }
     }
@@ -276,3 +265,4 @@ async function generateAssignedProjectCardsAll() {
 }
 
 generateAssignedProjectCardsAll();
+generateUnassignedStudentCardsAll();

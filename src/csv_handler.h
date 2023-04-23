@@ -101,7 +101,7 @@ enum class ProjectHealth {
 
 class CsvHandler {
 public:
-        CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data);
+        CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data, const char* unassigned_students_csv_filepath);
         ~CsvHandler() = default;
         
 private:
@@ -120,4 +120,5 @@ private:
         ProjectDataHandler    &m_project_data;
         StudentDataHandler    &m_student_data;
         InstructorDataHandler &m_instructor_data;
+        std::vector<StudentData> m_unnasigned_students;
 };

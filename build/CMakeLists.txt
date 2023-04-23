@@ -15,7 +15,8 @@ set(PRECOMPILED_HEADER_FILES
 		../src/rang.h
 		../src/magic_enum.h)
 
-set(HEADER_FILES )
+set(HEADER_FILES 
+		../src/compiled/.gitkeep)
 
 set(SOURCE_FILES 
 		../src/logger.cpp

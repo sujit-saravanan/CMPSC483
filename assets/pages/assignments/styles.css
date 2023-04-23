@@ -162,6 +162,21 @@ body {
     margin-right: 1rem;
 }
 
+#unassigned-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.unassigned-student-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background-color: var(--bg-light-dark);
+    border-radius: 0.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
 .project-major-preferences th,
 .project-special-requirements th,
 .project-assigned-student-name-major th,
