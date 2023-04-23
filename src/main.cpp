@@ -16,10 +16,7 @@ int main() {
         auto server = (new Server())
                 ->page("/", "assets/pages/home")
                 ->page("/home", "assets/pages/home")
-                ->page("/project", "assets/pages/project")
                 ->page("/admin", "assets/pages/admin")
-                ->page("/search", "assets/pages/search")
-                ->page("/exchange", "assets/pages/exchange")
                 ->page("/assignments", "assets/pages/assignments")
                 ->page("/shared", "assets/shared");
         
