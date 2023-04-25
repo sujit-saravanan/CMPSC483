@@ -112,9 +112,10 @@ public:
         StudentDataHandler&    studentData();
         InstructorDataHandler& instructorData();
         
-        std::string pretty_format();
         std::string json_format();
-        std::string simple_format();
+        
+        void unassign_student(const std::string &instructor_name, const std::string &project_id, const std::string &student_id);
+        void assign_student(const std::string &instructor_name, const std::string &project_id, const std::string &student_id);
 
 private:
         ProjectDataHandler    &m_project_data;

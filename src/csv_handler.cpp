@@ -232,33 +232,10 @@ CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &stu
                         .m_ip         = true,
                         .m_on_campus  = true,
                 };
-                
+                m_student_data.studentsMap()[campus_ids[i]] = data;
                 m_unnasigned_students.emplace_back(data);
         }
 }
-std::string CsvHandler::pretty_format() {
-        std::string ret;
-        for (const auto &instructor_projects_pair: m_instructor_data.instructorProjectsMap()) {
-                ret += instructor_projects_pair.first + ":\n";
-                for (const auto &project_id: instructor_projects_pair.second) {
-                        ret += "\t" + project_id + ": [";
-                        ret += magic_enum::enum_name((m_project_data.projectsMap())[project_id].m_first_preference);
-                        ret += ", ";
-                        ret += magic_enum::enum_name((m_project_data.projectsMap())[project_id].m_second_preference);
-                        ret += ", ";
-                        for (const auto &tertiary_preference: (m_project_data.projectsMap())[project_id].m_third_preferences) {
-                                ret += magic_enum::enum_name(tertiary_preference);
-                                ret += ", ";
-                        }
-                        ret += "]\n";
-                        
-                        for (const auto &student_id: (m_student_data.projectStudentsMap())[project_id])
-                                ret += "\t\t" + m_student_data.studentsMap()[student_id].m_first_name + " " + m_student_data.studentsMap()[student_id].m_last_name + "(" + student_id + ")" + "\n";
-                }
-        }
-        return ret;
-}
-
 
 
 ProjectHealth CsvHandler::rateHealth(const ProjectData &project_data, const std::vector<std::string> &students) {
@@ -331,23 +308,39 @@ std::string CsvHandler::json_format() {
         }
         return ret.dump(4);
 }
-std::string CsvHandler::simple_format() {
-        std::string ret;
-        ret += "Instructor,Project,Students\n";
-        for (const auto &instructor_projects_pair: m_instructor_data.instructorProjectsMap()) {
-                for (const auto &project_id: instructor_projects_pair.second) {
-                        ret += instructor_projects_pair.first + "," + m_project_data.projectsMap()[project_id].m_project_title;
-                        ret += ",{";
-                        for (const auto &student_id: (m_student_data.projectStudentsMap())[project_id]) {
-                                ret += m_student_data.studentsMap()[student_id].m_first_name + " " + m_student_data.studentsMap()[student_id].m_last_name + "(" + student_id + ")" + "     ";
-                        }
-                        ret += "}\n";
-                }
-        }
-        return ret;
-}
 
 ProjectDataHandler &CsvHandler::projectData() { return m_project_data; }
 StudentDataHandler &CsvHandler::studentData() { return m_student_data; }
 InstructorDataHandler &CsvHandler::instructorData() { return m_instructor_data; }
+void CsvHandler::unassign_student(const std::string &instructor_name, const std::string &project_id, const std::string &student_id) {
+        auto student_data = m_student_data.studentsMap()[student_id];
+        m_unnasigned_students.push_back(student_data);
+        
+        auto student_vector = m_student_data.projectStudentsMap()[project_id];
+        
+        std::vector<std::string> new_vector;
+        new_vector.reserve(student_vector.size() - 1);
+        
+        for (const auto& cur_student_id : student_vector)
+                if (cur_student_id != student_id)
+                        new_vector.push_back(cur_student_id);
+        
+        m_student_data.projectStudentsMap()[project_id] = new_vector;
+}
+void CsvHandler::assign_student(const std::string &instructor_name, const std::string &project_id, const std::string &student_id) {
+        StudentData target_student_data;
+        std::vector<StudentData> new_vector;
+        new_vector.reserve(m_unnasigned_students.size() - 1);
+        
+        for (const auto& student_data : m_unnasigned_students){
+                if (student_data.m_campus_id != student_id)
+                        new_vector.push_back(student_data);
+                else
+                        target_student_data = student_data;
+        }
+        
+        m_unnasigned_students = new_vector;
+        m_student_data.projectStudentsMap()[project_id].push_back(student_id);
+}
+
 

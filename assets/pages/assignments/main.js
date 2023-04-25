@@ -1,24 +1,52 @@
 const StudentMajorTypes = ["BME", "CMPEN", "CMPSC", "DS", "ED", "EE", "EGEE", "ESC", "IE", "MATSE", "ME"];
+
+let active_project;
+
 async function get_InstructorProjectStudentTree() {
     const res = await fetch("/instructor_project_student_tree_get");
     return await res.json();
 }
 
-function YesNo(bool){
+async function assign_student(student_id) {
+    let json_data =
+        '{' +
+        '    "instructor_name": "' + active_project.instructor_name + '",' +
+        '    "project_id": "' + active_project.project_id +  '",' +
+        '    "student_id": "' + student_id + '"' +
+        '}'
+
+    const res = await fetch("/assign_student", {
+        method: "POST",
+        body: json_data,
+    });
+    await generateAssignedProjectCardsAll();
+    await generateUnassignedStudentCardsAll();
+
+}
+
+async function unassign_student(instructor_name, project_id, student_id) {
+    let json_data =
+        '{' +
+        '    "instructor_name": "' + instructor_name + '",' +
+        '    "project_id": "' + project_id +  '",' +
+        '    "student_id": "' + student_id + '"' +
+        '}'
+
+    const res = await fetch("/unassign_student", {
+        method: "POST",
+        body: json_data,
+    });
+    await generateAssignedProjectCardsAll();
+    await generateUnassignedStudentCardsAll();
+}
+
+
+function YesNo(bool) {
     if (bool) return "Yes";
     return "No";
 }
 
-//<div class="dropdown">
-//     <button class="dropbtn">Dropdown
-//       <i class="fa fa-caret-down"></i>
-//     </button>
-//     <div class="dropdown-content">
-//       <a href="#">Link 1</a>
-//       <a href="#">Link 2</a>
-//       <a href="#">Link 3</a>
-//     </div>
-//   </div>
+
 
 async function createInstructorDropDown() {
     const data = await get_InstructorProjectStudentTree();
@@ -36,14 +64,14 @@ async function createInstructorDropDown() {
     dropdown_content.classList.add("dropdown-content");
     let all_anchor = document.createElement("a");
     all_anchor.appendChild(document.createTextNode("Global View"));
-    all_anchor.onclick = async  ()=>{
+    all_anchor.onclick = async () => {
         generateAssignedProjectCardsAll();
     }
     dropdown_content.appendChild(all_anchor);
-    for (let instructor in data["Assigned Students"]){
+    for (let instructor in data["Assigned Students"]) {
         let instructor_anchor = document.createElement("a");
         instructor_anchor.appendChild(document.createTextNode(instructor));
-        instructor_anchor.onclick = async ()=>{
+        instructor_anchor.onclick = async () => {
             await generateAssignedProjectCards(instructor);
         };
         dropdown_content.appendChild(instructor_anchor);
@@ -52,8 +80,10 @@ async function createInstructorDropDown() {
 
     navbar.appendChild(dropdown);
 }
+
 createInstructorDropDown();
-function createRequirementsTR(tbody, key, value){
+
+function createRequirementsTR(tbody, key, value) {
     let row = tbody.insertRow();
 
     let header = document.createElement("th");
@@ -65,7 +95,7 @@ function createRequirementsTR(tbody, key, value){
     row.append(body);
 }
 
-function createRequirementsTRArray(tbody, key, array){
+function createRequirementsTRArray(tbody, key, array) {
     let row = tbody.insertRow();
 
     let header = document.createElement("th");
@@ -74,7 +104,7 @@ function createRequirementsTRArray(tbody, key, array){
 
     let body = document.createElement("td");
 
-    if (array){
+    if (array) {
         let str = ""
         str += StudentMajorTypes[array[0]];
         for (let preference in array)
@@ -86,7 +116,7 @@ function createRequirementsTRArray(tbody, key, array){
     row.append(body);
 }
 
-function createCard(project){
+function createCard(project, instructor_name, project_id) {
     let project_title = project["project-title"];
     let company_name = project["company-name"];
     let first_preference = project["first-preference"];
@@ -108,12 +138,20 @@ function createCard(project){
     const companyName = document.createElement("div");
     companyName.classList.add("company-name");
     companyName.appendChild(document.createTextNode(company_name));
+    const projectRadio = document.createElement("input");
+    projectRadio.classList.add("project-radio");
+    projectRadio.type = "radio";
+    projectRadio.name = "projectRadio";
+    if (project_id === active_project.project_id){
+        projectRadio.checked = true;
+    }
+    projectRadio.onclick = function () {active_project = {instructor_name, project_id};};
 
+    projectHeader.appendChild(projectRadio);
     projectHeader.appendChild(projectTitle);
     projectHeader.appendChild(companyName);
 
-    console.log(project["health"]);
-    switch (project["health"]){
+    switch (project["health"]) {
         case 0:
             projectHeader.style.backgroundColor = "#dd7777";
             break;
@@ -155,10 +193,13 @@ function createCard(project){
     const projectAssignedStudents = document.createElement("div");
     projectAssignedStudents.classList.add("project-assigned-students");
 
-    for (let student_id in students){
+    for (let student_id in students) {
         let student = students[student_id]
         const ProjectAssignedStudentInfo = document.createElement("div");
         ProjectAssignedStudentInfo.classList.add("project-assigned-student-info");
+
+        const ProjectAssignedStudentInfoTable = document.createElement("div");
+        ProjectAssignedStudentInfoTable.classList.add("project-assigned-student-info-table");
 
         const ProjectAssignedStudentNameMajor = document.createElement("table");
         ProjectAssignedStudentNameMajor.classList.add("project-assigned-student-name-major");
@@ -174,11 +215,21 @@ function createCard(project){
         createRequirementsTR(ProjectAssignedStudentRequirementsTBody, "NDA:", YesNo(student["nda"]));
         createRequirementsTR(ProjectAssignedStudentRequirementsTBody, "IP:", YesNo(student["ip"]));
 
-        ProjectAssignedStudentInfo.appendChild(ProjectAssignedStudentNameMajor);
-        ProjectAssignedStudentInfo.appendChild(ProjectAssignedStudentRequirements);
+        ProjectAssignedStudentInfoTable.appendChild(ProjectAssignedStudentNameMajor);
+        ProjectAssignedStudentInfoTable.appendChild(ProjectAssignedStudentRequirements);
+
+        const ProjectAssignedStudentButton = document.createElement("div");
+        ProjectAssignedStudentButton.classList.add("project-assigned-student-button");
+        ProjectAssignedStudentButton.appendChild(document.createTextNode(">"))
+        ProjectAssignedStudentButton.onclick = async () => {
+            await unassign_student(instructor_name, project_id, student_id);
+        }
+
+
+        ProjectAssignedStudentInfo.appendChild(ProjectAssignedStudentInfoTable);
+        ProjectAssignedStudentInfo.appendChild(ProjectAssignedStudentButton);
         projectAssignedStudents.appendChild(ProjectAssignedStudentInfo);
     }
-
 
 
     projectContent.appendChild(projectRequirements);
@@ -191,7 +242,6 @@ function createCard(project){
 }
 
 
-
 async function generateAssignedProjectCards(instructor_name) {
     let card_title = document.getElementById("current_instructor_view_title");
     card_title.innerText = instructor_name + "'s Assignments";
@@ -202,9 +252,9 @@ async function generateAssignedProjectCards(instructor_name) {
         assigned_list.removeChild(assigned_list.firstChild)
     }
 
-    for (const project_id in data["Assigned Students"][instructor_name]){
+    for (const project_id in data["Assigned Students"][instructor_name]) {
         const project = data["Assigned Students"][instructor_name][project_id];
-        assigned_list.appendChild(createCard(project));
+        assigned_list.appendChild(createCard(project, instructor_name, project_id));
     }
 
 
@@ -219,10 +269,13 @@ async function generateUnassignedStudentCardsAll() {
     }
 
     let students = data["Unassigned Students"];
-    for (let student_id in data["Unassigned Students"]){
+    for (let student_id in data["Unassigned Students"]) {
         let student = students[student_id]
         const UnassignedStudentInfo = document.createElement("div");
         UnassignedStudentInfo.classList.add("unassigned-student-info");
+
+        const UnassignedStudentInfoTable = document.createElement("div");
+        UnassignedStudentInfoTable.classList.add("unassigned-student-info-table");
 
         const UnassignedStudentNameMajor = document.createElement("table");
         UnassignedStudentNameMajor.classList.add("unassigned-student-name-major");
@@ -238,8 +291,19 @@ async function generateUnassignedStudentCardsAll() {
         createRequirementsTR(UnassignedStudentRequirementsTBody, "NDA:", YesNo(student["nda"]));
         createRequirementsTR(UnassignedStudentRequirementsTBody, "IP:", YesNo(student["ip"]));
 
-        UnassignedStudentInfo.appendChild(UnassignedStudentNameMajor);
-        UnassignedStudentInfo.appendChild(UnassignedStudentRequirements);
+
+        const UnassignedStudentButton = document.createElement("div");
+        UnassignedStudentButton.classList.add("unassigned-student-button");
+        UnassignedStudentButton.appendChild(document.createTextNode("<"))
+        UnassignedStudentButton.onclick = async () => {
+            await assign_student(student_id);
+        }
+
+        UnassignedStudentInfoTable.appendChild(UnassignedStudentNameMajor);
+        UnassignedStudentInfoTable.appendChild(UnassignedStudentRequirements);
+
+        UnassignedStudentInfo.appendChild(UnassignedStudentButton);
+        UnassignedStudentInfo.appendChild(UnassignedStudentInfoTable);
         unassigned_list.appendChild(UnassignedStudentInfo);
     }
 }
@@ -255,10 +319,14 @@ async function generateAssignedProjectCardsAll() {
         assigned_list.removeChild(assigned_list.firstChild)
     }
 
-    for (let instructor_name in data["Assigned Students"]){
-        for (const project_id in data["Assigned Students"][instructor_name]){
+    for (let instructor_name in data["Assigned Students"]) {
+        for (const project_id in data["Assigned Students"][instructor_name]) {
             const project = data["Assigned Students"][instructor_name][project_id];
-            assigned_list.appendChild(createCard(project));
+            if (active_project == null){
+                active_project = {instructor_name, project_id};
+
+            }
+            assigned_list.appendChild(createCard(project, instructor_name, project_id));
         }
     }
 
