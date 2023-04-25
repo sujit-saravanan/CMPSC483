@@ -68,6 +68,67 @@ void ProjectDataHandler::parse(const char *csv_filepath) noexcept {
 std::unordered_map<std::string, ProjectData> &ProjectDataHandler::projectsMap() {
         return m_projects_map;
 }
+void ProjectDataHandler::parse(const std::string &body) noexcept {
+        std::stringstream sstream(body);
+        
+        auto projects = rapidcsv::Document(sstream, rapidcsv::LabelParams(0, -1));
+        
+        size_t m_count = projects.GetRowCount();
+        
+        std::vector<std::string> project_ids = projects.GetColumn<std::string>("ProjectID");
+        std::vector<std::string> company_names = projects.GetColumn<std::string>("CompanyName");
+        std::vector<std::string> project_titles = projects.GetColumn<std::string>("ProjectTitle");
+        
+        std::vector<std::array<int, magic_enum::enum_count<StudentMajorTypes>()>> major_preferences;
+        for (int i = 0; i < m_count; i++) {
+                std::array<int, magic_enum::enum_count<StudentMajorTypes>()> preferences{};
+                for (int j = 0; j < magic_enum::enum_count<StudentMajorTypes>(); j++)
+                        preferences[j] = projects.GetCell<int>(std::string(magic_enum::enum_name((StudentMajorTypes) j)), i);
+                major_preferences.push_back(preferences);
+        }
+        
+        std::vector<std::string> course_times = projects.GetColumn<std::string>("CourseTime");
+        std::vector<std::string> course_names = projects.GetColumn<std::string>("CourseName");
+        std::vector<int> confidentialities = projects.GetColumn<int>("Confidentiality");
+        std::vector<int> ips = projects.GetColumn<int>("IP");
+        std::vector<int> physical_prototypes = projects.GetColumn<int>("PhysicalPrototype");
+        
+        projects.Clear();
+        
+        for (int i = 0; i < m_count; i++) {
+                ProjectData data = {
+                        .m_course_time        = course_times[i],
+                        .m_course_name        = course_names[i],
+                        .m_company_name       = company_names[i],
+                        .m_project_title      = project_titles[i],
+                        .m_confidentiality    = static_cast<bool>(confidentialities[i]),
+                        .m_ip                 = static_cast<bool>(ips[i]),
+                        .m_physical_prototype = static_cast<bool>(physical_prototypes[i]),
+                };
+                
+                for (int major = 0; major < magic_enum::enum_count<StudentMajorTypes>(); major++) {
+                        int rank = major_preferences[i][major];
+                        switch (rank) {
+                                case 0:
+                                        continue;
+                                case 1:
+                                        data.m_first_preference = static_cast<StudentMajorTypes>(major);
+                                        break;
+                                case 2:
+                                        data.m_second_preference = static_cast<StudentMajorTypes>(major);
+                                        break;
+                                case 3:
+                                        data.m_third_preferences.push_back(static_cast<StudentMajorTypes>(major));
+                                        break;
+                                default:
+                                        ERROR("INVALID RANK: RANK SHOULD BE 3 OR BELOW, (%s, %s)", std::string(data.m_project_title).c_str(), std::string(magic_enum::enum_name(static_cast<StudentMajorTypes>(major))).c_str());
+                                        break;
+                        }
+                }
+                
+                m_projects_map[project_ids[i]] = data;
+        }
+}
 
 StudentDataHandler::StudentDataHandler(const char *csv_filepath) noexcept {
         parse(csv_filepath);
@@ -186,6 +247,19 @@ void InstructorDataHandler::parse(const char *csv_filepath) noexcept {
         m_instructor_projects_map = instructor_projects_map;
 }
 std::unordered_map<std::string, std::vector<std::string>> &InstructorDataHandler::instructorProjectsMap() { return m_instructor_projects_map; }
+void InstructorDataHandler::parse(const std::string &body) noexcept {
+        std::stringstream sstream(body);
+        auto instructors = rapidcsv::Document(sstream, rapidcsv::LabelParams(0, -1));
+        
+        std::vector<std::string> instructor_names = instructors.GetColumn<std::string>("InstructorName");
+        std::vector<std::string> project_ids = instructors.GetColumn<std::string>("ProjectID");
+        std::unordered_map<std::string, std::vector<std::string>> instructor_projects_map;
+        
+        
+        for (int i = 0; i < instructors.GetRowCount(); i++)
+                instructor_projects_map[instructor_names[i]].push_back(project_ids[i]);
+        m_instructor_projects_map = instructor_projects_map;
+}
 
 CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &student_data, InstructorDataHandler &instructor_data, const char *unassigned_students_csv_filepath)
         : m_project_data(project_data), m_student_data(student_data), m_instructor_data(instructor_data) {
@@ -196,10 +270,7 @@ CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &stu
         for (auto &email: campus_ids) {
                 size_t at_location = email.find_first_of('@');
                 email.resize(at_location);
-//                std::cout << email << "\n";
         }
-        for (const auto &id: campus_ids)
-                std::cout << id << "\n";
         std::vector<std::string> courses = students.GetColumn<std::string>("Course");
         std::vector<StudentMajorTypes> majors;
         majors.reserve(courses.size());
@@ -212,13 +283,6 @@ CsvHandler::CsvHandler(ProjectDataHandler &project_data, StudentDataHandler &stu
                 else if (major == "EDSGN")
                         majors.push_back(StudentMajorTypes::ED);
         }
-        
-        std::cout << first_names.size() << "\n";
-        std::cout << last_names.size() << "\n";
-        std::cout << campus_ids.size() << "\n";
-        std::cout << courses.size() << "\n";
-        std::cout << majors.size() << "\n";
-        
         
         for (int i = 0; i < majors.size(); i++) {
                 StudentData data = {
@@ -341,6 +405,56 @@ void CsvHandler::assign_student(const std::string &instructor_name, const std::s
         
         m_unnasigned_students = new_vector;
         m_student_data.projectStudentsMap()[project_id].push_back(student_id);
+}
+std::string CsvHandler::export_csv() {
+        std::string csv;
+        csv += "project_id, student_id\n";
+        for (const auto& pair : m_student_data.projectStudentsMap())
+                for (const auto& student_id : pair.second)
+                        csv += pair.first + ", " + student_id + "\n";
+        return csv;
+}
+void CsvHandler::parse(const std::string &body) noexcept {
+        std::stringstream sstream(body);
+        m_unnasigned_students.clear();
+        
+        auto students = rapidcsv::Document(sstream, rapidcsv::LabelParams(0, -1));
+        std::vector<std::string> first_names = students.GetColumn<std::string>("First Name");
+        std::vector<std::string> last_names = students.GetColumn<std::string>("Last Name");
+        std::vector<std::string> campus_ids = students.GetColumn<std::string>("E-mail Address");
+        for (auto &email: campus_ids) {
+                size_t at_location = email.find_first_of('@');
+                email.resize(at_location);
+        }
+        std::vector<std::string> courses = students.GetColumn<std::string>("Course");
+        std::vector<StudentMajorTypes> majors;
+        majors.reserve(courses.size());
+        for (const auto &course: courses) {
+                size_t gap_location = course.find_first_of(' ');
+                auto major = course.substr(0, gap_location);
+                
+                if (magic_enum::enum_cast<StudentMajorTypes>(major).has_value())
+                        majors.push_back(magic_enum::enum_cast<StudentMajorTypes>(major).value());
+                else if (major == "EDSGN")
+                        majors.push_back(StudentMajorTypes::ED);
+        }
+        
+        
+        for (int i = 0; i < majors.size(); i++) {
+                StudentData data = {
+                        .m_major      = majors[i],
+                        .m_comment    = "",
+                        .m_project_id = "",
+                        .m_last_name  = last_names[i],
+                        .m_first_name = first_names[i],
+                        .m_campus_id  = campus_ids[i],
+                        .m_nda        = true,
+                        .m_ip         = true,
+                        .m_on_campus  = true,
+                };
+                m_student_data.studentsMap()[campus_ids[i]] = data;
+                m_unnasigned_students.emplace_back(data);
+        }
 }
 
 

@@ -55,15 +55,17 @@ body {
 .section:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
-#drop_zone {
+.drop_zone {
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-style: dashed;
   border-color: var(--blue);
+  max-width: 20rem !important;
+  min-width: 20rem !important;
 }
 
-#upload-icon {
+.upload-icon {
   filter: invert(18%) sepia(44%) saturate(2474%) hue-rotate(201deg)
     brightness(95%) contrast(89%);
   height: 5rem;
@@ -128,7 +130,7 @@ th {
   min-width: 10rem;
 }
 
-#export_button {
+.export_button {
   background-color: var(--navy);
   color: var(--bg-light-bright);
   min-height: 0;
@@ -136,7 +138,7 @@ th {
   padding: 1rem 0 1rem 0;
   cursor: pointer;
 }
-#export_button:hover{
+.export_button:hover{
   background-color: var(--bg-light-bright);
   color: var(--navy);
 }
@@ -147,16 +149,23 @@ label {
   font-family: "Roboto Bold", serif;
   text-decoration: underline;
 }
-#upload-text {
+.upload-text {
+  margin-top: 1rem;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  gap: 1ch;
 }
-
 #current-assignments-section {
   min-width: 70rem;
   max-width: 70rem;
   min-height: 50ch;
   max-height: 50ch;
+}
+#drop_zones {
+  gap: 3rem;
+  display: flex;
+  justify-content: center;
+  max-width: 60rem;
+  flex-grow: 2;
+  flex-wrap: wrap;
 }

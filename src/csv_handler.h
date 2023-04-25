@@ -43,8 +43,6 @@ struct ProjectData {
 };
 
 
-
-
 class ProjectDataHandler {
 public:
         explicit ProjectDataHandler(const char *csv_filepath) noexcept;
@@ -52,6 +50,7 @@ public:
         
 public:
         void parse(const char* csv_filepath) noexcept; // Parses a csv into main memory
+        void parse(const std::string &body) noexcept;
         std::unordered_map<std::string, ProjectData>& projectsMap(); // Used to access the private m_projects_map
         
 private:
@@ -85,6 +84,8 @@ public:
         
 public:
         void parse(const char* csv_filepath) noexcept;
+        void parse(const std::string &body) noexcept;
+        
         std::unordered_map<std::string, std::vector<std::string>> &instructorProjectsMap();
         
 private:
@@ -116,6 +117,9 @@ public:
         
         void unassign_student(const std::string &instructor_name, const std::string &project_id, const std::string &student_id);
         void assign_student(const std::string &instructor_name, const std::string &project_id, const std::string &student_id);
+        
+        void parse(const std::string &body) noexcept;
+        std::string export_csv();
 
 private:
         ProjectDataHandler    &m_project_data;

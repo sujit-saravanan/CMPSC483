@@ -20,25 +20,43 @@
                 </div>
             </div>
         </div>
-        <div id="drop_zone" class="section" ondrop="dropHandler(event, this);" ondragover="dragOverHandler(event, this);" ondragleave="dragLeaveHandler(event, this);">
-            <img id="upload-icon" src="shared/textures/upload.svg">
-            <div id="upload-text">
-                <input class="file-upload-button" type="file" id="actual-btn" hidden multiple>
-                <label for="actual-btn">Choose studentAssignments.csv file</label>
-                <p> or drag it here</p>
+
+        <div id="drop_zones">
+            <div class="drop_zone section" id="projectsFinal_drop_zone">
+                <img class="upload-icon" src="shared/textures/upload.svg">
+                <div class="upload-text">
+                    <input class="file-upload-button actual-btn" id="button-projectsFinal" type="file" hidden multiple>
+                    <label for="button-projectsFinal">Choose projectsFinal.csv file</label>
+                </div>
+            </div>
+            <div class="drop_zone section" id="sectionInfo_drop_zone">
+                <img class="upload-icon" src="shared/textures/upload.svg">
+                <div class="upload-text">
+                    <input class="file-upload-button actual-btn" id="button-sectionInfo" type="file" hidden multiple>
+                    <label for="button-sectionInfo">Choose sectionInfo.csv file</label>
+                </div>
+            </div>
+            <div class="drop_zone section" id="studentAssignments_drop_zone">
+                <img class="upload-icon" src="shared/textures/upload.svg">
+                <div class="upload-text">
+                    <input class="file-upload-button actual-btn" id="button-studentAssignments" type="file" hidden multiple>
+                    <label for="button-studentAssignments">Choose studentAssignments.csv file</label>
+                </div>
+            </div>
+            <div class="drop_zone section" id="studentsWithoutPrefs_drop_zone">
+                <img class="upload-icon" src="shared/textures/upload.svg">
+                <div class="upload-text">
+                    <input class="file-upload-button actual-btn" id="button-studentsWithoutPrefs" type="file" hidden multiple>
+                    <label for="button-studentsWithoutPrefs">Choose students without prefs.csv file</label>
+                </div>
             </div>
         </div>
-        <div class="section" id="current-assignments-section">
-            <table id="current-assignments-table">
-                <tr>
-                    <th>Instructor</th>
-                    <th>Project</th>
-                    <th>Students</th>
-                </tr>
-            </table>
+
+        <div class="export_button section" onclick="upload()">
+            Upload to Server
         </div>
-        <div id="export_button" class="section">
-            Upload Assignments to Database
+        <div class="export_button section" onclick="download()">
+            Export to CSV
         </div>
     </div>
 

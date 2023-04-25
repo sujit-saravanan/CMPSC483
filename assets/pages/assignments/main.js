@@ -1,6 +1,7 @@
 const StudentMajorTypes = ["BME", "CMPEN", "CMPSC", "DS", "ED", "EE", "EGEE", "ESC", "IE", "MATSE", "ME"];
 
 let active_project;
+let current_view;
 
 async function get_InstructorProjectStudentTree() {
     const res = await fetch("/instructor_project_student_tree_get");
@@ -19,9 +20,14 @@ async function assign_student(student_id) {
         method: "POST",
         body: json_data,
     });
-    await generateAssignedProjectCardsAll();
-    await generateUnassignedStudentCardsAll();
 
+    if (current_view === "allViewNoInstructor"){
+        await generateAssignedProjectCardsAll();
+    } else {
+        await generateAssignedProjectCards(current_view);
+    }
+    await generateUnassignedStudentCardsAll();
+    updateBars();
 }
 
 async function unassign_student(instructor_name, project_id, student_id) {
@@ -36,8 +42,13 @@ async function unassign_student(instructor_name, project_id, student_id) {
         method: "POST",
         body: json_data,
     });
-    await generateAssignedProjectCardsAll();
+    if (current_view === "allViewNoInstructor"){
+        await generateAssignedProjectCardsAll();
+    } else {
+        await generateAssignedProjectCards(current_view);
+    }
     await generateUnassignedStudentCardsAll();
+    updateBars();
 }
 
 
@@ -241,8 +252,72 @@ function createCard(project, instructor_name, project_id) {
     return ret
 }
 
+async function getRatios() {
+    const data = await get_InstructorProjectStudentTree();
+    let total = 0;
+    let dangerous = 0;
+    let ok = 0;
+    let healthy = 0;
+
+    let assigned = 0;
+    let unassigned = Object.keys(data["Unassigned Students"]).length;
+    for (let instructor_name in data["Assigned Students"]){
+        for (let project_id in data["Assigned Students"][instructor_name]){
+            total++;
+            switch (data["Assigned Students"][instructor_name][project_id]["health"]) {
+                case 0:
+                    dangerous++;
+                    break;
+                case 1:
+                    ok++
+                    break;
+                case 2:
+                    healthy++
+                    break;
+                default:
+                    console.log(data["Assigned Students"][instructor_name][project_id]["health"])
+                    break;
+            }
+            let st = data["Assigned Students"][instructor_name][project_id]["students"];
+            if (st !== undefined)
+                if (Object.keys(data["Assigned Students"][instructor_name][project_id]["students"]).length > 0)
+                    assigned += Object.keys(data["Assigned Students"][instructor_name][project_id]["students"]).length;
+        }
+    }
+
+
+    let project_bar_ratios = {
+        total: total,
+        healthy: healthy,
+        ok: ok,
+        dangerous: dangerous
+    }
+    let student_bar_ratios = {
+        total: unassigned + assigned,
+        unassigned: unassigned,
+        assigned: assigned
+    }
+    // console.log(ratios);
+    return {
+        project_bar_ratios: project_bar_ratios,
+        student_bar_ratios: student_bar_ratios
+    };
+}
+
+async function updateBars(){
+    let project_bar = document.getElementById("project_bar");
+    let student_bar = document.getElementById("student_bar");
+    const ratios = await getRatios();
+
+    project_bar.children[0].style.width = 100 * ratios.project_bar_ratios.healthy / ratios.project_bar_ratios.total + "%";
+    project_bar.children[1].style.width = 100 * ratios.project_bar_ratios.ok / ratios.project_bar_ratios.total + "%";
+    project_bar.children[2].style.width = 100 * ratios.project_bar_ratios.dangerous / ratios.project_bar_ratios.total + "%";
+    student_bar.children[0].style.width = 100 * ratios.student_bar_ratios.assigned / ratios.student_bar_ratios.total + "%";
+    student_bar.children[1].style.width = 100 * ratios.student_bar_ratios.unassigned / ratios.student_bar_ratios.total + "%";
+}
 
 async function generateAssignedProjectCards(instructor_name) {
+    current_view = instructor_name;
     let card_title = document.getElementById("current_instructor_view_title");
     card_title.innerText = instructor_name + "'s Assignments";
     const data = await get_InstructorProjectStudentTree();
@@ -252,10 +327,22 @@ async function generateAssignedProjectCards(instructor_name) {
         assigned_list.removeChild(assigned_list.firstChild)
     }
 
+    let i = true;
     for (const project_id in data["Assigned Students"][instructor_name]) {
+        if (i && active_project.instructor_name !== instructor_name) {
+            active_project = {instructor_name, project_id};
+            i = false;
+        }
         const project = data["Assigned Students"][instructor_name][project_id];
-        assigned_list.appendChild(createCard(project, instructor_name, project_id));
+
+        let card = createCard(project, instructor_name, project_id);
+        if (project_id === active_project.project_id){
+            card.children[0].children[0].checked = true;
+        }
+        assigned_list.appendChild(card);
+
     }
+
 
 
 }
@@ -309,6 +396,7 @@ async function generateUnassignedStudentCardsAll() {
 }
 
 async function generateAssignedProjectCardsAll() {
+    current_view = "allViewNoInstructor";
     let card_title = document.getElementById("current_instructor_view_title");
     card_title.innerText = "All Assignments";
 
@@ -334,3 +422,4 @@ async function generateAssignedProjectCardsAll() {
 
 generateAssignedProjectCardsAll();
 generateUnassignedStudentCardsAll();
+updateBars();

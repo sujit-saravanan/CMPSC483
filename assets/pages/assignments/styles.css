@@ -22,6 +22,7 @@ body {
 }
 
 #navbar {
+    width: 100%;
     overflow: hidden;
     background-color: var(--navy);
 }
@@ -55,6 +56,39 @@ body {
     background-color: var(--blue);
 }
 
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#project_bar {
+    width: 90%;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
+#student_bar {
+    width: 90%;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
+.bar_element {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: green;
+    text-wrap: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.bar_element_text {
+    margin-left: 1rem;
+}
+
 .dropdown-content {
     display: none !important;
     position: absolute !important;
@@ -84,9 +118,10 @@ body {
 
 
 .cards {
-    margin: 5vh;
+    margin: 0 5vh 5vh;
 
     display: flex;
+    gap: 1rem;
     justify-content: space-around;
 }
 
@@ -189,6 +224,7 @@ body {
 }
 
 .project-assigned-student-button {
+    user-select: none;
     background-color: var(--navy);
     color: var(--bg-light-bright);
     cursor: pointer;
