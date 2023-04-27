@@ -36,6 +36,8 @@ async function upload() {
 
     for (let key in file_map)
         await send_csv(file_map[key]);
+
+    alert("Uploaded CSV!");
 }
 
 async function export_csv() {

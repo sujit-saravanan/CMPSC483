@@ -64,13 +64,13 @@ body {
 }
 
 #project_bar {
-    width: 90%;
+    width: calc(90vw + 2rem);
     height: 2rem;
     display: flex;
     align-items: center;
 }
 #student_bar {
-    width: 90%;
+    width: calc(90vw + 2rem);
     height: 2rem;
     display: flex;
     align-items: center;
@@ -121,7 +121,7 @@ body {
     margin: 0 5vh 5vh;
 
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     justify-content: space-around;
 }
 
@@ -150,6 +150,8 @@ body {
 }
 
 .project-header {
+    cursor: pointer;
+
     padding: 1rem;
     border-radius: 0.5rem 0.5rem 0 0;
 

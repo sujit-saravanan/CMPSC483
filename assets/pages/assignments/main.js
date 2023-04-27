@@ -12,7 +12,7 @@ async function assign_student(student_id) {
     let json_data =
         '{' +
         '    "instructor_name": "' + active_project.instructor_name + '",' +
-        '    "project_id": "' + active_project.project_id +  '",' +
+        '    "project_id": "' + active_project.project_id + '",' +
         '    "student_id": "' + student_id + '"' +
         '}'
 
@@ -21,7 +21,7 @@ async function assign_student(student_id) {
         body: json_data,
     });
 
-    if (current_view === "allViewNoInstructor"){
+    if (current_view === "allViewNoInstructor") {
         await generateAssignedProjectCardsAll();
     } else {
         await generateAssignedProjectCards(current_view);
@@ -34,7 +34,7 @@ async function unassign_student(instructor_name, project_id, student_id) {
     let json_data =
         '{' +
         '    "instructor_name": "' + instructor_name + '",' +
-        '    "project_id": "' + project_id +  '",' +
+        '    "project_id": "' + project_id + '",' +
         '    "student_id": "' + student_id + '"' +
         '}'
 
@@ -42,7 +42,7 @@ async function unassign_student(instructor_name, project_id, student_id) {
         method: "POST",
         body: json_data,
     });
-    if (current_view === "allViewNoInstructor"){
+    if (current_view === "allViewNoInstructor") {
         await generateAssignedProjectCardsAll();
     } else {
         await generateAssignedProjectCards(current_view);
@@ -56,7 +56,6 @@ function YesNo(bool) {
     if (bool) return "Yes";
     return "No";
 }
-
 
 
 async function createInstructorDropDown() {
@@ -142,6 +141,10 @@ function createCard(project, instructor_name, project_id) {
     // Creating project header
     const projectHeader = document.createElement("div");
     projectHeader.classList.add("project-header");
+    projectHeader.onclick = function () {
+        projectHeader.children[0].checked = true
+        active_project = {instructor_name, project_id};
+    };
 
     const projectTitle = document.createElement("div");
     projectTitle.classList.add("project-title");
@@ -153,10 +156,12 @@ function createCard(project, instructor_name, project_id) {
     projectRadio.classList.add("project-radio");
     projectRadio.type = "radio";
     projectRadio.name = "projectRadio";
-    if (project_id === active_project.project_id){
+    if (project_id === active_project.project_id) {
         projectRadio.checked = true;
     }
-    projectRadio.onclick = function () {active_project = {instructor_name, project_id};};
+    projectRadio.onclick = function () {
+        active_project = {instructor_name, project_id};
+    };
 
     projectHeader.appendChild(projectRadio);
     projectHeader.appendChild(projectTitle);
@@ -260,9 +265,11 @@ async function getRatios() {
     let healthy = 0;
 
     let assigned = 0;
-    let unassigned = Object.keys(data["Unassigned Students"]).length;
-    for (let instructor_name in data["Assigned Students"]){
-        for (let project_id in data["Assigned Students"][instructor_name]){
+    let unassigned = 0;
+    if (data["Unassigned Students"] !== undefined)
+        unassigned = Object.keys(data["Unassigned Students"]).length;
+    for (let instructor_name in data["Assigned Students"]) {
+        for (let project_id in data["Assigned Students"][instructor_name]) {
             total++;
             switch (data["Assigned Students"][instructor_name][project_id]["health"]) {
                 case 0:
@@ -275,7 +282,6 @@ async function getRatios() {
                     healthy++
                     break;
                 default:
-                    console.log(data["Assigned Students"][instructor_name][project_id]["health"])
                     break;
             }
             let st = data["Assigned Students"][instructor_name][project_id]["students"];
@@ -297,14 +303,13 @@ async function getRatios() {
         unassigned: unassigned,
         assigned: assigned
     }
-    // console.log(ratios);
     return {
         project_bar_ratios: project_bar_ratios,
         student_bar_ratios: student_bar_ratios
     };
 }
 
-async function updateBars(){
+async function updateBars() {
     let project_bar = document.getElementById("project_bar");
     let student_bar = document.getElementById("student_bar");
     const ratios = await getRatios();
@@ -336,13 +341,12 @@ async function generateAssignedProjectCards(instructor_name) {
         const project = data["Assigned Students"][instructor_name][project_id];
 
         let card = createCard(project, instructor_name, project_id);
-        if (project_id === active_project.project_id){
+        if (project_id === active_project.project_id) {
             card.children[0].children[0].checked = true;
         }
         assigned_list.appendChild(card);
 
     }
-
 
 
 }
@@ -407,14 +411,16 @@ async function generateAssignedProjectCardsAll() {
         assigned_list.removeChild(assigned_list.firstChild)
     }
 
+    let i = 0;
     for (let instructor_name in data["Assigned Students"]) {
         for (const project_id in data["Assigned Students"][instructor_name]) {
             const project = data["Assigned Students"][instructor_name][project_id];
-            if (active_project == null){
+            if (active_project == null || (i < 1 && current_view !== "allViewNoInstructor")) {
                 active_project = {instructor_name, project_id};
 
             }
             assigned_list.appendChild(createCard(project, instructor_name, project_id));
+            i++
         }
     }
 
