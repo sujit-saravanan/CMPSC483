@@ -17,6 +17,17 @@ chmod +x build.sh
 ./build.sh
 ```
 
+# Mac Instructions
+Requirement: Homebrew package manager
+
+https://brew.sh/
+
+```
+brew install cmake llvm ninja
+./build.sh
+```
+
+
 # Command to run
 ```
 stitch run release
@@ -24,6 +35,10 @@ stitch run release
 or
 ```
 stitch run dev
+```
+or
+```
+./build.sh
 ```
 
 # Current progress:
